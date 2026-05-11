@@ -1,104 +1,89 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace PE26A_DAMC
 {
+    /// <summary>
+    /// Formulario de la Mesa de Prácticas 1 - Operaciones con Matrices
+    /// Implementa: Generación de matrices, coloreo, ordenamiento y análisis de datos
+    /// Incluye reproductor de música integrado
+    /// 
+    /// Autor: DAMC
+    /// Fecha: 2026
+    /// </summary>
     public partial class DlgMesaPracticas1 : Form
     {
         // ====================================================================
         // ATRIBUTOS DE LA CLASE
         // ====================================================================
-        int RA; // Almacena el renglón actual para operaciones en matrices
-        int SumatoriaTemp = 0; // Variable temporal para sumar valores en la práctica 3
 
-        // Atributo nuevo para el control del reproductor de música
-        bool estaReproduciendo = false;
+        /// <summary>Índice del renglón actual para operaciones en matrices</summary>
+        private int renglonActual = 0;
+
+        /// <summary>Variable temporal para acumular sumatoria en prácticas</summary>
+        private int sumatoria = 0;
+
+        /// <summary>Flag que indica si la música está reproduciéndose</summary>
+        private bool estaReproduciendo = false;
 
         // ====================================================================
         // CONSTRUCTOR
         // ====================================================================
+
+        /// <summary>
+        /// Inicializa el formulario y configura el reproductor de música
+        /// </summary>
         public DlgMesaPracticas1()
         {
             InitializeComponent();
-            RA = 0;
+            renglonActual = 0;
 
-            // --- INICIALIZACIÓN DEL SISTEMA DE MÚSICA ---
             try
             {
-                // NOTA: Cambia esta ruta por la canción que desees reproducir
+                // NOTA: Cambiar esta ruta según tu sistema de archivos
                 reproductorMusica.URL = @"C:\Users\Lenovo\Music\Music\God Of War (PlayStation Soundtrack).mp3";
-                // Asignamos el volumen inicial basado en el valor del TrackBar (50)
                 reproductorMusica.settings.volume = trkVolumen.Value;
-                estaReproduciendo = true; // Indicamos que la música arrancó
+                estaReproduciendo = true;
             }
             catch
             {
-                // Si falla al cargar la música (ruta no existe, etc.), lo ignoramos para que no colapse el programa
+                // Si la canción no existe, continuar sin música
             }
         }
 
         // ====================================================================
-        // GESTIÓN DE PANELES (NAVEGACIÓN ENTRE PRÁCTICAS)
+        // GESTIÓN DE PANELES (NAVEGACIÓN)
         // ====================================================================
 
-        // Muestra u oculta el Panel de la Práctica 1 y asegura que los demás estén ocultos
+        /// <summary>Alterna visibilidad del Panel 1 y oculta los demás</summary>
         private void BtnPractica1_Click(object sender, EventArgs e)
-        {
-            if (PnlPracticas1.Visible)
-                PnlPracticas1.Visible = false;
-            else
-            {
-                PnlPracticas1.Visible = true;
-                PnlPracticas2.Visible = false;
-                PnlPracticas3.Visible = false;
-                PnlPracticas4.Visible = false;
-            }
-        }
+            => MostrarPanel(PnlPracticas1);
 
-        // Muestra u oculta el Panel de la Práctica 2 y asegura que los demás estén ocultos
+        /// <summary>Alterna visibilidad del Panel 2 y oculta los demás</summary>
         private void BtnPractica2_Click(object sender, EventArgs e)
-        {
-            if (PnlPracticas2.Visible)
-                PnlPracticas2.Visible = false;
-            else
-            {
-                PnlPracticas2.Visible = true;
-                PnlPracticas1.Visible = false;
-                PnlPracticas3.Visible = false;
-                PnlPracticas4.Visible = false;
-            }
-        }
+            => MostrarPanel(PnlPracticas2);
 
-        // Muestra u oculta el Panel de la Práctica 3 y asegura que los demás estén ocultos
+        /// <summary>Alterna visibilidad del Panel 3 y oculta los demás</summary>
         private void BtnPractica3_Click(object sender, EventArgs e)
-        {
-            if (PnlPracticas3.Visible)
-                PnlPracticas3.Visible = false;
-            else
-            {
-                PnlPracticas3.Visible = true;
-                PnlPracticas1.Visible = false;
-                PnlPracticas2.Visible = false;
-                PnlPracticas4.Visible = false;
-            }
-        }
+            => MostrarPanel(PnlPracticas3);
 
-        // Muestra u oculta el Panel de la Práctica 4 y asegura que los demás estén ocultos
+        /// <summary>Alterna visibilidad del Panel 4 y oculta los demás</summary>
         private void BtnPractica4_Click(object sender, EventArgs e)
+            => MostrarPanel(PnlPracticas4);
+
+        /// <summary>
+        /// Muestra un panel específico y oculta todos los demás
+        /// </summary>
+        private void MostrarPanel(Panel panelActivo)
         {
-            if (PnlPracticas4.Visible)
-                PnlPracticas4.Visible = false;
-            else
-            {
-                PnlPracticas4.Visible = true;
-                PnlPracticas1.Visible = false;
-                PnlPracticas2.Visible = false;
-                PnlPracticas3.Visible = false;
-            }
+            PnlPracticas1.Visible = (panelActivo == PnlPracticas1);
+            PnlPracticas2.Visible = (panelActivo == PnlPracticas2);
+            PnlPracticas3.Visible = (panelActivo == PnlPracticas3);
+            PnlPracticas4.Visible = (panelActivo == PnlPracticas4);
         }
 
-        // Alterna la visibilidad de todas las matrices en pantalla
+        /// <summary>Alterna la visibilidad de todas las matrices</summary>
         private void BTNmatrix_Click(object sender, EventArgs e)
         {
             DgvMatriz1.Visible = !DgvMatriz1.Visible;
@@ -110,467 +95,420 @@ namespace PE26A_DAMC
         // FUNCIONES DE APOYO
         // ====================================================================
 
-        // Valida si una cadena de texto es un número entero válido
-        private bool Esnumero(string Valor)
-        {
-            int Numero;
-            return int.TryParse(Valor, out Numero);
-        }
+        /// <summary>
+        /// Valida si una cadena es un número entero válido
+        /// </summary>
+        /// <param name="valor">Cadena a validar</param>
+        /// <returns>True si es número válido, False en otro caso</returns>
+        private bool EsNumero(string valor) 
+            => int.TryParse(valor, out _);
 
         // ====================================================================
-        // PRÁCTICA 1
+        // PRÁCTICA 1: MATRICES CON DEGRADADO Y ORDENAMIENTO
         // ====================================================================
 
-        // Genera la estructura de la Matriz 1 con tamaño y anchos dinámicos
+        /// <summary>
+        /// Genera estructura de matriz con columnas en forma de pirámide
+        /// </summary>
         private void BtnPractica1P1_Click(object sender, EventArgs e)
         {
-            int Tamano;
-            int Anchoconstante;
-
-            // Validación de captura del tamaño de la matriz
-            if (!Esnumero(TbxCaptura1.Text))
+            if (!EsNumero(TbxCaptura1.Text))
             {
                 MessageBox.Show("Capture el tamaño de la matriz");
+                TbxCaptura1.Focus();
                 return;
             }
-            Tamano = Convert.ToInt32(TbxCaptura1.Text);
+            int tamanio = Convert.ToInt32(TbxCaptura1.Text);
 
-            // Validación de captura del ancho de columnas
-            if (!Esnumero(TbxCaptura2.Text))
+            if (!EsNumero(TbxCaptura2.Text))
             {
                 MessageBox.Show("Capture el ancho de columnas");
+                TbxCaptura2.Focus();
                 return;
             }
-            Anchoconstante = Convert.ToInt32(TbxCaptura2.Text);
+            int anchoConstante = Convert.ToInt32(TbxCaptura2.Text);
 
-            // Reseteo de la matriz
             DgvMatriz1.Columns.Clear();
             DgvMatriz1.Rows.Clear();
-            RA = 0;
+            renglonActual = 0;
 
-            // Agrega columnas a la matriz y establece su ancho dinámico en forma de pirámide
-            for (int i = 0; i < Tamano; i++)
+            // Crear columnas con ancho en forma de pirámide
+            for (int i = 0; i < tamanio; i++)
             {
-                DgvMatriz1.Columns.Add("Col" + i.ToString(), "HC" + i.ToString());
-
-                // La primera mitad crece, la segunda mitad decrece
-                if (i < (Tamano / 2))
-                    DgvMatriz1.Columns[i].Width = i * Anchoconstante;
+                DgvMatriz1.Columns.Add("Col" + i, "HC" + i);
+                
+                // Primera mitad crece, segunda mitad decrece
+                if (i < (tamanio / 2))
+                    DgvMatriz1.Columns[i].Width = i * anchoConstante;
                 else
-                    DgvMatriz1.Columns[i].Width = (Tamano - i) * Anchoconstante;
+                    DgvMatriz1.Columns[i].Width = (tamanio - i) * anchoConstante;
             }
 
-            // Agrega las filas correspondientes al tamaño
-            for (int r = 0; r < Tamano; r++)
+            for (int r = 0; r < tamanio; r++)
                 DgvMatriz1.Rows.Add();
         }
 
-        // Llena la Matriz 1 y aplica colores en escala de grises basados en la posición
+        /// <summary>
+        /// Llena matriz con degradado de grises basado en posición
+        /// </summary>
         private void BtnPractica2P1_Click(object sender, EventArgs e)
         {
             for (int r = 0; r < DgvMatriz1.Rows.Count; r++)
             {
                 for (int c = 0; c < DgvMatriz1.Columns.Count; c++)
                 {
-                    // Asigna el valor del ancho de la columna a la celda
                     DgvMatriz1.Rows[r].Cells[c].Value = DgvMatriz1.Columns[c].Width;
 
-                    // Aplica degradado de grises (más claro hacia el centro, más oscuro a los bordes)
-                    if (c < (DgvMatriz1.Columns.Count / 2))
-                    {
-                        int color = 127 + (c * 8);
-                        DgvMatriz1.Rows[r].Cells[c].Style.BackColor = Color.FromArgb(color, color, color);
-                    }
-                    else
-                    {
-                        int color = 255 - ((c - 15) * 8);
-                        DgvMatriz1.Rows[r].Cells[c].Style.BackColor = Color.FromArgb(color, color, color);
-                    }
+                    int colorGris = (c < (DgvMatriz1.Columns.Count / 2))
+                        ? 127 + (c * 8)
+                        : 255 - ((c - 15) * 8);
+
+                    DgvMatriz1.Rows[r].Cells[c].Style.BackColor = 
+                        Color.FromArgb(colorGris, colorGris, colorGris);
                 }
             }
         }
 
-        // Llena la Matriz 1 con números aleatorios y resalta los '9' en rojo
+        /// <summary>
+        /// Llena matriz con números aleatorios (0-9) y colorea los 9 en rojo
+        /// </summary>
         private void BtnPractica3P1_Click(object sender, EventArgs e)
         {
-            Random Random = new Random();
+            Random generador = new Random();
 
-            // Recorre cada celda de la matriz y asigna un número aleatorio entre 0 y 9
             for (int r = 0; r < DgvMatriz1.Rows.Count; r++)
             {
                 for (int c = 0; c < DgvMatriz1.Columns.Count; c++)
                 {
-                    int Ultimovalor = Random.Next(0, 10);
-                    DgvMatriz1.Rows[r].Cells[c].Value = Ultimovalor;
-
-                    // Si el número es 9, pinta el fondo de rojo
-                    if (Ultimovalor == 9)
-                        DgvMatriz1.Rows[r].Cells[c].Style.BackColor = Color.Red;
+                    int numero = generador.Next(0, 10);
+                    DgvMatriz1.Rows[r].Cells[c].Value = numero;
+                    DgvMatriz1.Rows[r].Cells[c].Style.BackColor = 
+                        (numero == 9) ? Color.Red : Color.Empty;
                 }
             }
         }
 
         // ====================================================================
-        // PRÁCTICA 2
+        // PRÁCTICA 2: COLOREO RGB Y ANÁLISIS DE PARES/IMPARES
         // ====================================================================
 
-        // Genera la estructura de la Matriz 2 basándose en dimensiones especificadas
+        /// <summary>
+        /// Construye matriz 2 con dimensiones y opciones de cilindro
+        /// </summary>
         private void BTN1Practrica2_Click(object sender, EventArgs e)
         {
-            int Columnas, Renglones, Anchoconstante, Alturaconstante;
+            if (!ValidarParametrosMatriz(out int columnas, out int renglones, 
+                out int ancho, out int altura))
+                return;
 
-            // Validación de inputs para Columnas, Renglones, Ancho y Altura
-            if (!Esnumero(TbxCaptura1.Text))
-            {
-                MessageBox.Show("Capture el número de columnas");
-                TbxCaptura1.Focus(); return;
-            }
-            Columnas = Convert.ToInt32(TbxCaptura1.Text);
-
-            if (!Esnumero(TbxCaptura2.Text))
-            {
-                MessageBox.Show("Capture el número de renglones");
-                TbxCaptura2.Focus(); return;
-            }
-            Renglones = Convert.ToInt32(TbxCaptura2.Text);
-
-            if (!Esnumero(TbxCaptura3.Text))
-            {
-                MessageBox.Show("Capture el ancho");
-                TbxCaptura3.Focus(); return;
-            }
-            Anchoconstante = Convert.ToInt32(TbxCaptura3.Text);
-
-            if (!Esnumero(TbxCaptura4.Text))
-            {
-                MessageBox.Show("Capture la altura constante en el campo 4");
-                TbxCaptura4.Focus(); return;
-            }
-            Alturaconstante = Convert.ToInt32(TbxCaptura4.Text);
-
-            // Limpia la matriz antes de generar una nueva
             DgvMatriz2.Columns.Clear();
             DgvMatriz2.Rows.Clear();
 
-            // Agrega columnas a la matriz y establece su ancho dependiento del CheckBox Cilindro
-            for (int i = 0; i < Columnas; i++)
+            for (int i = 0; i < columnas; i++)
             {
-                DgvMatriz2.Columns.Add("Col" + i.ToString(), "HC" + i.ToString());
-                DgvMatriz2.Columns[i].Width = Anchoconstante;
+                DgvMatriz2.Columns.Add("Col" + i, "HC" + i);
 
                 if (CBXcilindro.Checked)
                 {
-                    if (i < (Columnas / 2))
-                        DgvMatriz2.Columns[i].Width = (i * 1) + Anchoconstante;
+                    if (i < (columnas / 2))
+                        DgvMatriz2.Columns[i].Width = (i * 1) + ancho;
                     else
-                        DgvMatriz2.Columns[i].Width = (Columnas - i) + Anchoconstante;
+                        DgvMatriz2.Columns[i].Width = (columnas - i) + ancho;
                 }
                 else
-                {
-                    DgvMatriz2.Columns[i].Width = Anchoconstante;
-                }
+                    DgvMatriz2.Columns[i].Width = ancho;
             }
 
-            // Agrega filas a la matriz y establece su altura constante
-            for (int r = 0; r < Renglones; r++)
+            for (int r = 0; r < renglones; r++)
             {
                 DgvMatriz2.Rows.Add();
-                DgvMatriz2.Rows[r].Height = Alturaconstante;
+                DgvMatriz2.Rows[r].Height = altura;
             }
         }
 
-        // Aplica colores dinámicos (RGB) a las celdas de la Matriz 2 basados en su posición
+        /// <summary>
+        /// Valida parámetros de entrada para crear matriz
+        /// </summary>
+        private bool ValidarParametrosMatriz(out int columnas, out int renglones,
+            out int ancho, out int altura)
+        {
+            columnas = renglones = ancho = altura = 0;
+
+            if (!EsNumero(TbxCaptura1.Text))
+            {
+                MessageBox.Show("Capture columnas");
+                TbxCaptura1.Focus();
+                return false;
+            }
+            columnas = Convert.ToInt32(TbxCaptura1.Text);
+
+            if (!EsNumero(TbxCaptura2.Text))
+            {
+                MessageBox.Show("Capture renglones");
+                TbxCaptura2.Focus();
+                return false;
+            }
+            renglones = Convert.ToInt32(TbxCaptura2.Text);
+
+            if (!EsNumero(TbxCaptura3.Text))
+            {
+                MessageBox.Show("Capture ancho");
+                TbxCaptura3.Focus();
+                return false;
+            }
+            ancho = Convert.ToInt32(TbxCaptura3.Text);
+
+            if (!EsNumero(TbxCaptur4.Text))
+            {
+                MessageBox.Show("Capture altura");
+                TbxCaptur4.Focus();
+                return false;
+            }
+            altura = Convert.ToInt32(TbxCaptur4.Text);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Aplica colores RGB dinámicos basados en posición de celda
+        /// </summary>
         private void BTN2Practrica2_Click(object sender, EventArgs e)
         {
             for (int r = 0; r < DgvMatriz2.Rows.Count; r++)
             {
                 for (int c = 0; c < DgvMatriz2.Columns.Count; c++)
                 {
-                    // Fórmulas matemáticas para generar tonos RGB únicos por celda
                     int rojo = ((r * c) * 1000) % 256;
                     int verde = ((r + c) * 500) % 256;
                     int azul = ((r * 5 + c * 3) * 200) % 256;
 
-                    DgvMatriz2.Rows[r].Cells[c].Style.BackColor = Color.FromArgb(rojo, verde, azul);
-
-                    // Coloca el código RGB generado como texto dentro de la celda
-                    DgvMatriz2.Rows[r].Cells[c].Value = rojo + "," + verde + "," + azul;
+                    DgvMatriz2.Rows[r].Cells[c].Style.BackColor = 
+                        Color.FromArgb(rojo, verde, azul);
+                    DgvMatriz2.Rows[r].Cells[c].Value = $"{rojo},{verde},{azul}";
                 }
             }
         }
 
-        // Llena la Matriz 2 con dígitos aleatorios, cuenta y suma pares e impares, pintándolos
+        /// <summary>
+        /// Llena con aleatorios, cuenta pares/impares y los colorea
+        /// </summary>
         private void BTN3Practrica2_Click(object sender, EventArgs e)
         {
-            int ContadorImpares = 1;
-            int ContadorPares = 1;
-            int SumaPares = 0;
-            int SumaImpares = 0;
-
-            int ValorRandom;
-            Random Random = new Random();
-            RA = 0;
+            int contadorPares = 1;
+            int contadorImpares = 1;
+            int sumaPares = 0;
+            int sumaImpares = 0;
+            Random generador = new Random();
 
             for (int r = 0; r < DgvMatriz2.Rows.Count; r++)
             {
                 for (int c = 0; c < DgvMatriz2.Columns.Count; c++)
                 {
-                    ValorRandom = Random.Next(0, 11);
+                    int numero = generador.Next(0, 11);
 
-                    // Si es PAR
-                    if (ValorRandom % 2 == 0)
+                    if (numero % 2 == 0)
                     {
                         DgvMatriz2.Rows[r].Cells[c].Style.BackColor = Color.DarkBlue;
-                        TBXCantidadPares.Text = ContadorPares++.ToString();
-                        SumaPares += ValorRandom;
+                        TBXCantidadPares.Text = contadorPares++.ToString();
+                        sumaPares += numero;
                     }
-                    // Si es IMPAR
                     else
                     {
                         DgvMatriz2.Rows[r].Cells[c].Style.BackColor = Color.DarkMagenta;
-                        TBXCantidadImpares.Text = ContadorImpares++.ToString();
-                        SumaImpares += ValorRandom;
+                        TBXCantidadImpares.Text = contadorImpares++.ToString();
+                        sumaImpares += numero;
                     }
 
-                    DgvMatriz2.Rows[r].Cells[c].Value = ValorRandom;
+                    DgvMatriz2.Rows[r].Cells[c].Value = numero;
                 }
             }
-            // Actualiza los TextBoxes con los totales de las sumatorias
-            SumatoriaPares.Text = SumaPares.ToString();
-            SumatoriaImpares.Text = SumaImpares.ToString();
+
+            SumatoriaPares.Text = sumaPares.ToString();
+            SumatoriaImpares.Text = sumaImpares.ToString();
         }
 
-        // Ordena de mayor a menor el Renglón Actual (RA) de la Matriz 2 usando el Método Burbuja
+        /// <summary>
+        /// Ordena renglón actual usando algoritmo Burbuja (descendente)
+        /// </summary>
         private void BTN4PRACTICA2_Click(object sender, EventArgs e)
         {
-            bool Ordenado = true; // Bandera para verificar si la fila ya está ordenada
+            bool ordenado = true;
 
-            int totalColumnas = DgvMatriz2.Columns.Count;
-
-            // Recorre cada par de columnas adyacentes y compara sus valores en el renglón RA
             for (int c = 0; c < DgvMatriz2.Columns.Count - 1; c++)
             {
-                int Valor1 = Convert.ToInt32(DgvMatriz2.Rows[RA].Cells[c].Value);
-                int Valor2 = Convert.ToInt32(DgvMatriz2.Rows[RA].Cells[c + 1].Value);
+                int valor1 = Convert.ToInt32(DgvMatriz2.Rows[renglonActual].Cells[c].Value);
+                int valor2 = Convert.ToInt32(DgvMatriz2.Rows[renglonActual].Cells[c + 1].Value);
 
-                // Si el valor siguiente es mayor que el actual, se intercambian (orden descendente)
-                if (Valor2 > Valor1)
+                if (valor2 > valor1)
                 {
-                    DgvMatriz2.Rows[RA].Cells[c].Value = Valor2;
-                    DgvMatriz2.Rows[RA].Cells[c + 1].Value = Valor1;
-                    Ordenado = false; // Como hubo cambio, la fila aún no estaba completamente ordenada
+                    DgvMatriz2.Rows[renglonActual].Cells[c].Value = valor2;
+                    DgvMatriz2.Rows[renglonActual].Cells[c + 1].Value = valor1;
+                    ordenado = false;
                 }
             }
 
-            // Si la matriz ya está ordenada, cambia el color de fondo a verde y avanza al siguiente renglón
-            if (Ordenado == true)
+            if (ordenado)
             {
                 for (int c = 0; c < DgvMatriz2.Columns.Count; c++)
-                {
-                    DgvMatriz2.Rows[RA].Cells[c].Style.BackColor = Color.Green;
-                }
+                    DgvMatriz2.Rows[renglonActual].Cells[c].Style.BackColor = Color.Green;
 
-                RA++; // Avanza al siguiente renglón para la próxima vez que se pulse el botón
-
-                if (RA == DgvMatriz2.Rows.Count - 1)
-                {
-                    RA = 0; // Reinicia el índice si llegó al final
-                }
+                renglonActual++;
+                if (renglonActual == DgvMatriz2.Rows.Count)
+                    renglonActual = 0;
             }
         }
 
-        // Ordena TODA la Matriz 2 renglón por renglón y asegura que tenga datos primero
+        /// <summary>
+        /// Ordena TODA la matriz renglón por renglón
+        /// </summary>
         private void BTNMESAPRACTICAS1PANEL2_Click(object sender, EventArgs e)
         {
-            // 1. Verificación de existencia de cuadrícula
             if (DgvMatriz2.Rows.Count == 0 || DgvMatriz2.Columns.Count == 0)
             {
-                MessageBox.Show("Primero debe generar la matriz.");
+                MessageBox.Show("Primero genere la matriz");
                 return;
             }
 
-            // 2. Verificación de datos válidos (números)
-            var valorCelda = DgvMatriz2.Rows[0].Cells[0].Value;
-            if (valorCelda == null || !Esnumero(valorCelda.ToString()))
+            var valor = DgvMatriz2.Rows[0].Cells[0].Value;
+            if (valor == null || !EsNumero(valor.ToString()))
             {
-                MessageBox.Show("La matriz no contiene números. Por favor, genere los números aleatorios con el Botón 3 primero.");
+                MessageBox.Show("La matriz no contiene números. Presione Botón 3 primero");
                 return;
             }
 
-            bool Ordenado = true;
-            int TotalColumnas = DgvMatriz2.Columns.Count;
+            bool ordenado = true;
 
-            // Aplica el ordenamiento Burbuja a todos los renglones
-            for (int i = 0; i < TotalColumnas - 1; i++)
+            for (int i = 0; i < DgvMatriz2.Columns.Count - 1; i++)
             {
-                for (int R = 0; R < DgvMatriz2.Rows.Count; R++)
+                for (int r = 0; r < DgvMatriz2.Rows.Count; r++)
                 {
                     for (int c = 0; c < DgvMatriz2.Columns.Count - 1; c++)
                     {
-                        int Valor1 = Convert.ToInt32(DgvMatriz2.Rows[R].Cells[c].Value);
-                        int Valor2 = Convert.ToInt32(DgvMatriz2.Rows[R].Cells[c + 1].Value);
+                        int v1 = Convert.ToInt32(DgvMatriz2.Rows[r].Cells[c].Value);
+                        int v2 = Convert.ToInt32(DgvMatriz2.Rows[r].Cells[c + 1].Value);
 
-                        if (Valor2 > Valor1)
+                        if (v2 > v1)
                         {
-                            DgvMatriz2.Rows[R].Cells[c].Value = Valor2;
-                            DgvMatriz2.Rows[R].Cells[c + 1].Value = Valor1;
-                            Ordenado = false;
+                            DgvMatriz2.Rows[r].Cells[c].Value = v2;
+                            DgvMatriz2.Rows[r].Cells[c + 1].Value = v1;
+                            ordenado = false;
                         }
                     }
                 }
             }
 
-            // Pinta toda la matriz de verde si el ordenamiento finalizó exitosamente
-            if (Ordenado == true)
+            if (ordenado)
             {
-                for (int R = 0; R < DgvMatriz2.Rows.Count; R++)
-                {
+                for (int r = 0; r < DgvMatriz2.Rows.Count; r++)
                     for (int c = 0; c < DgvMatriz2.Columns.Count; c++)
-                    {
-                        DgvMatriz2.Rows[R].Cells[c].Style.BackColor = Color.Green;
-                    }
-
-                    RA++;
-                    if (RA == DgvMatriz2.Rows.Count - 1)
-                    {
-                        RA = 0;
-                    }
-                }
+                        DgvMatriz2.Rows[r].Cells[c].Style.BackColor = Color.Green;
             }
         }
 
         // ====================================================================
-        // PRÁCTICA 3 (LABORATORIOS)
+        // PRÁCTICA 3: ANÁLISIS DE LABORATORIOS
         // ====================================================================
 
-        // Genera la estructura de la Matriz 3 para evaluar los 5 Laboratorios
+        /// <summary>
+        /// Construye tabla para evaluar 5 laboratorios en 7 días
+        /// </summary>
         private void BTN1practica3_Click(object sender, EventArgs e)
         {
-            // Configuración visual por defecto
             DGVMATRIZ3.DefaultCellStyle.BackColor = Color.White;
             DGVMATRIZ3.DefaultCellStyle.ForeColor = Color.Black;
             DGVMATRIZ3.AllowUserToAddRows = false;
-
-            // Limpieza
             DGVMATRIZ3.Columns.Clear();
             DGVMATRIZ3.Rows.Clear();
 
-            // Creación de columna principal de Laboratorios
             DGVMATRIZ3.Columns.Add("Lab", "Lab");
             DGVMATRIZ3.Columns["Lab"].Width = 180;
 
-            // Agrega las columnas de Días (D1 a D7)
             for (int j = 1; j < 8; j++)
             {
-                DGVMATRIZ3.Columns.Add("Col" + j.ToString(), "D" + j.ToString());
-                DGVMATRIZ3.Columns["Col" + j.ToString()].Width = 40;
+                DGVMATRIZ3.Columns.Add("Col" + j, "D" + j);
+                DGVMATRIZ3.Columns["Col" + j].Width = 40;
             }
 
-            // Columnas de estadísticas
             DGVMATRIZ3.Columns.Add("promedio", "promedio");
             DGVMATRIZ3.Columns.Add("#Altas", "#Altas");
             DGVMATRIZ3.Columns.Add("#Media", "#Media");
             DGVMATRIZ3.Columns.Add("#Baja", "#Baja");
 
-            // Anchos de las columnas estadísticas
-            DGVMATRIZ3.Columns["promedio"].Width = 70;
-            DGVMATRIZ3.Columns["#Altas"].Width = 60;
-            DGVMATRIZ3.Columns["#Media"].Width = 60;
-            DGVMATRIZ3.Columns["#Baja"].Width = 60;
-
-            // Agrega 5 filas nombradas "Laboratorio 1" a "Laboratorio 5"
             for (int i = 0; i < 5; i++)
-            {
-                DGVMATRIZ3.Rows.Add("Laboratorio " + (i + 1).ToString());
-            }
+                DGVMATRIZ3.Rows.Add("Laboratorio " + (i + 1));
         }
 
-        // Llena los días de los laboratorios con lecturas aleatorias
+        /// <summary>
+        /// Llena días con lecturas aleatorias (0-40)
+        /// </summary>
         private void BTN2Practica3_Click(object sender, EventArgs e)
         {
-            int ValorRandom;
-            Random Random = new Random();
+            Random generador = new Random();
 
-            // Recorre cada celda de datos y asigna un valor (0 a 40)
             for (int r = 0; r < DGVMATRIZ3.Rows.Count; r++)
             {
-                // Omite las últimas 4 columnas de estadísticas
                 for (int c = 1; c < DGVMATRIZ3.Columns.Count - 4; c++)
                 {
-                    ValorRandom = Random.Next(0, 41);
-                    DGVMATRIZ3.Rows[r].Cells[c].Value = ValorRandom;
-                    SumatoriaTemp += ValorRandom;
+                    int numero = generador.Next(0, 41);
+                    DGVMATRIZ3.Rows[r].Cells[c].Value = numero;
+                    sumatoria += numero;
                 }
             }
         }
 
-        // Calcula el promedio semanal por cada laboratorio
+        /// <summary>
+        /// Calcula promedio semanal por laboratorio
+        /// </summary>
         private void BTN3Practica3_Click(object sender, EventArgs e)
         {
-            int Promedio = 0;
-            int sumatoriatempo = 0;
-            int Derecha = DGVMATRIZ3.ColumnCount - 4; // Índice de la columna Promedio
+            int columnaPromedio = DGVMATRIZ3.ColumnCount - 4;
 
             for (int r = 0; r < DGVMATRIZ3.Rows.Count; r++)
             {
-                for (int c = 1; c < DGVMATRIZ3.Columns.Count; c++)
-                {
-                    if (c != Derecha)
-                    {
-                        // Suma los valores de los días
-                        sumatoriatempo += Convert.ToInt32(DGVMATRIZ3.Rows[r].Cells[c].Value);
-                    }
-                    if (c == Derecha)
-                    {
-                        // Calcula el promedio entre los 7 días
-                        Promedio = sumatoriatempo / 7;
-                    }
-                }
-                sumatoriatempo = 0; // Reinicia sumatoria para el siguiente renglón
-                DGVMATRIZ3.Rows[r].Cells[Derecha].Value = Promedio; // Escribe el promedio
+                int suma = 0;
+                for (int c = 1; c < columnaPromedio; c++)
+                    suma += Convert.ToInt32(DGVMATRIZ3.Rows[r].Cells[c].Value);
+
+                int promedio = suma / 7;
+                DGVMATRIZ3.Rows[r].Cells[columnaPromedio].Value = promedio;
             }
         }
 
-        // Analiza las lecturas, las clasifica (Alta, Media, Baja) y las colorea
+        /// <summary>
+        /// Analiza y colorea lecturas: Rojo (>25), Azul (<18), Amarillo (18-25)
+        /// </summary>
         private void BTN4practica3_Click(object sender, EventArgs e)
         {
-            int SumaAlta = 0;
-            int SumaMedia = 0;
-            int SumaBaja = 0;
-            int ValorActual = 0;
+            int sumaAlta = 0, sumaMedia = 0, sumaBaja = 0;
 
             for (int r = 0; r < DGVMATRIZ3.Rows.Count; r++)
             {
-                // Recorre solo las columnas de los 7 días
                 for (int c = 1; c < DGVMATRIZ3.Columns.Count - 4; c++)
                 {
-                    ValorActual = Convert.ToInt32(DGVMATRIZ3.Rows[r].Cells[c].Value);
+                    int valor = Convert.ToInt32(DGVMATRIZ3.Rows[r].Cells[c].Value);
 
-                    // Clasificación y coloreo
-                    if (ValorActual > 25)
+                    if (valor > 25)
                     {
-                        SumaAlta++;
+                        sumaAlta++;
                         DGVMATRIZ3.Rows[r].Cells[c].Style.BackColor = Color.Red;
                     }
-                    else if (ValorActual < 18)
+                    else if (valor < 18)
                     {
-                        SumaBaja++;
+                        sumaBaja++;
                         DGVMATRIZ3.Rows[r].Cells[c].Style.BackColor = Color.RoyalBlue;
                     }
                     else
                     {
-                        SumaMedia++;
+                        sumaMedia++;
                         DGVMATRIZ3.Rows[r].Cells[c].Style.BackColor = Color.Yellow;
                     }
                 }
 
-                // Asigna los totales en las últimas tres columnas correspondientes
-                DGVMATRIZ3.Rows[r].Cells[9].Value = SumaAlta;
-                DGVMATRIZ3.Rows[r].Cells[10].Value = SumaMedia;
-                DGVMATRIZ3.Rows[r].Cells[11].Value = SumaBaja;
+                DGVMATRIZ3.Rows[r].Cells[9].Value = sumaAlta;
+                DGVMATRIZ3.Rows[r].Cells[10].Value = sumaMedia;
+                DGVMATRIZ3.Rows[r].Cells[11].Value = sumaBaja;
 
-                // Reinicia los contadores para analizar el siguiente laboratorio
-                SumaAlta = 0; SumaMedia = 0; SumaBaja = 0;
+                sumaAlta = sumaMedia = sumaBaja = 0;
             }
         }
 
@@ -578,46 +516,43 @@ namespace PE26A_DAMC
         // EVENTOS DEL REPRODUCTOR DE MÚSICA
         // ====================================================================
 
-        // Evento que se dispara al mover la barra de volumen (TrackBar)
+        /// <summary>
+        /// Ajusta volumen al mover el TrackBar
+        /// </summary>
         private void trkVolumen_Scroll_1(object sender, EventArgs e)
         {
-            // Ajusta el volumen del reproductor al valor actual de la barra (0 a 100)
             if (reproductorMusica != null)
-            {
                 reproductorMusica.settings.volume = trkVolumen.Value;
-            }
         }
 
-        // Evento que se dispara al presionar el botón de Play/Pausa
+        /// <summary>
+        /// Alterna entre Play/Pausa
+        /// </summary>
         private void btnPlayPause_Click(object sender, EventArgs e)
         {
-            if (reproductorMusica != null)
+            if (reproductorMusica == null) return;
+
+            if (estaReproduciendo)
             {
-                if (estaReproduciendo)
-                {
-                    // Si está sonando, la pausamos y cambiamos el texto del botón
-                    reproductorMusica.Ctlcontrols.pause();
-                    btnPlayPause.Text = "▶ Reproducir";
-                    estaReproduciendo = false;
-                }
-                else
-                {
-                    // Si está pausada, la reanudamos y cambiamos el texto
-                    reproductorMusica.Ctlcontrols.play();
-                    btnPlayPause.Text = "⏸ Pausar";
-                    estaReproduciendo = true;
-                }
+                reproductorMusica.Ctlcontrols.pause();
+                btnPlayPause.Text = "▶ Reproducir";
+                estaReproduciendo = false;
+            }
+            else
+            {
+                reproductorMusica.Ctlcontrols.play();
+                btnPlayPause.Text = "⏸ Pausar";
+                estaReproduciendo = true;
             }
         }
 
-        // Evento que se dispara al cerrar el Formulario
+        /// <summary>
+        /// Detiene música al cerrar formulario
+        /// </summary>
         private void DlgMesaPracticas1_FormClosing_1(object sender, FormClosingEventArgs e)
         {
-            // Detiene la música si el reproductor existe al cerrar la ventana
             if (reproductorMusica != null)
-            {
                 reproductorMusica.Ctlcontrols.stop();
-            }
         }
     }
 }

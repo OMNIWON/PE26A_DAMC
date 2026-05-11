@@ -1,106 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 using System.Windows.Forms;
 
 namespace PE26A_DAMC
 {
-    //-------------------------------------------------------------------------
-    // Programación Estructurada 2026A
-    // Diálogo de mesa de practicas 1
-    // CMAD. 2/18/2026
-    //-------------------------------------------------------------------------
+    /// <summary>
+    /// Formulario de la Mesa de Prácticas 3 - Navegación entre Paneles
+    /// Proporciona interfaz modular para acceder a diferentes prácticas
+    /// 
+    /// Autor: DAMC
+    /// Fecha: 2026
+    /// </summary>
     public partial class DlgMesaPracticas3 : Form
     {
-        //CONSTRUCTOR
+        // ====================================================================
+        // CONSTRUCTOR
+        // ====================================================================
+
+        /// <summary>
+        /// Inicializa el formulario de navegación
+        /// </summary>
         public DlgMesaPracticas3()
         {
             InitializeComponent();
         }
-        //-------------------------------------------------------------------------
-        // BOTÓN: Ejecuta el panel de practicas 1
-        //-------------------------------------------------------------------------
+
+        // ====================================================================
+        // GESTIÓN DE PANELES (NAVEGACIÓN ENTRE PRÁCTICAS)
+        // ====================================================================
+
+        /// <summary>
+        /// Alterna visibilidad del Panel 1 y oculta los demás
+        /// </summary>
         private void BtnPractica1_Click(object sender, EventArgs e)
-        {
-            if (PnlPracticas1.Visible)
-                PnlPracticas1.Visible = false;
-            else
-            {
-                PnlPracticas1.Visible = true;
-                PnlPracticas4.Visible = false;
-                PnlPracticas2.Visible = false;
-                PnlPracticas3.Visible = false;
+            => MostrarPanel(PnlPracticas1);
 
-
-                //esta linea de abajo simplifica el codigo de arriba ------|
-                //PnlPracticas1.Visible = !PnlPracticas1.Visible;     <-----|
-            }
-            
-
-        }
-        //-------------------------------------------------------------------------
-        // BOTÓN: Ejecuta el panel de practicas 2
-        //-------------------------------------------------------------------------
+        /// <summary>
+        /// Alterna visibilidad del Panel 2 y oculta los demás
+        /// </summary>
         private void BtnPractica2_Click(object sender, EventArgs e)
-        {
+            => MostrarPanel(PnlPracticas2);
 
-            if (PnlPracticas2.Visible)
-                PnlPracticas2.Visible = false;
-            else
-            {
-
-
-                PnlPracticas2.Visible = true;
-                PnlPracticas1.Visible = false;
-                PnlPracticas4.Visible = false;
-                PnlPracticas3.Visible = false;
-            }
-
-            // PnlPracticas2.Visible = !PnlPracticas2.Visible;
-        }
-        //-------------------------------------------------------------------------
-        // BOTÓN: Ejecuta el panel de practicas 3
-        //-------------------------------------------------------------------------
+        /// <summary>
+        /// Alterna visibilidad del Panel 3 y oculta los demás
+        /// </summary>
         private void BtnPractica3_Click(object sender, EventArgs e)
-        {
-            if (PnlPracticas3.Visible)
-                PnlPracticas3.Visible = false;
-            else
-            {
+            => MostrarPanel(PnlPracticas3);
 
-
-                PnlPracticas3.Visible = true;
-                PnlPracticas1.Visible = false;
-                PnlPracticas2.Visible = false;
-                PnlPracticas4.Visible = false;
-            }
-
-            //   PnlPracticas3.Visible = !PnlPracticas3.Visible;
-        }
-        //-------------------------------------------------------------------------
-        // BOTÓN: Ejecuta el panel de practicas 4
-        //-------------------------------------------------------------------------
+        /// <summary>
+        /// Alterna visibilidad del Panel 4 y oculta los demás
+        /// </summary>
         private void BtnPractica4_Click(object sender, EventArgs e)
+            => MostrarPanel(PnlPracticas4);
+
+        /// <summary>
+        /// Muestra un panel específico y oculta todos los demás
+        /// Implementa patrón de navegación modular
+        /// </summary>
+        /// <param name="panelActivo">Panel a mostrar</param>
+        private void MostrarPanel(Panel panelActivo)
         {
-            if (PnlPracticas4.Visible)
-                PnlPracticas4.Visible = false;
-            else
-            {
+            // Ocultar todos los paneles
+            PnlPracticas1.Visible = false;
+            PnlPracticas2.Visible = false;
+            PnlPracticas3.Visible = false;
+            PnlPracticas4.Visible = false;
 
-
-                PnlPracticas4.Visible = true;
-                PnlPracticas1.Visible = false;
-                PnlPracticas2.Visible = false;
-                PnlPracticas3.Visible = false;
-            }
-
-            // PnlPracticas4.Visible = !PnlPracticas4.Visible;
+            // Mostrar solo el panel seleccionado
+            if (panelActivo != null)
+                panelActivo.Visible = true;
         }
-
     }
 }
