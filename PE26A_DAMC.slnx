@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="PE26A_DAMC/PE26A_DAMC.csproj" Id="2a563d3f-18d1-4ac3-9997-e014641c1d33">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+</Solution>
