@@ -113,6 +113,7 @@
     <Compile Include="CircularPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ColorScheme.cs" />
     <Compile Include="DlgJuegoGato.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,6 +143,9 @@
     </Compile>
     <Compile Include="DlgMesaPracticas1.Designer.cs">
       <DependentUpon>DlgMesaPracticas1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DlgMesaPracticas4_Diseno.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormMusica.cs">
       <SubType>Form</SubType>

@@ -46,44 +46,43 @@
             this.lblModelo = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.PnlCentral = new System.Windows.Forms.Panel();
-            this.PnlPracticas1 = new System.Windows.Forms.Panel();
-            this.pnlMenuModos = new System.Windows.Forms.Panel();
-            this.btnSalirJuego = new System.Windows.Forms.Button();
-            this.btnModo1v1 = new System.Windows.Forms.Button();
-            this.btnModoPC = new System.Windows.Forms.Button();
-            this.pnlInicio = new System.Windows.Forms.Panel();
-            this.btnIniciarJuego = new System.Windows.Forms.Button();
             this.pnlJuego = new System.Windows.Forms.Panel();
-            this.lblInventario = new System.Windows.Forms.Label();
-            this.lblPuntos = new System.Windows.Forms.Label();
-            this.cmbSelectorArmas = new System.Windows.Forms.ComboBox();
             this.lblEstado = new System.Windows.Forms.Label();
-            this.cmbSeleccionBarco = new System.Windows.Forms.ComboBox();
             this.dgvJugador1 = new System.Windows.Forms.DataGridView();
             this.dgvJugador2 = new System.Windows.Forms.DataGridView();
-            this.btnConfirmar = new System.Windows.Forms.Button();
-            this.btnRotar = new System.Windows.Forms.Button();
-            this.btnAutoJ2 = new System.Windows.Forms.Button();
-            this.btnReacomodar = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lblPatrulla = new System.Windows.Forms.Label();
-            this.lblSubmarinos = new System.Windows.Forms.Label();
-            this.lblAcorazado = new System.Windows.Forms.Label();
             this.lblPortaaviones = new System.Windows.Forms.Label();
+            this.lblAcorazado = new System.Windows.Forms.Label();
+            this.lblSubmarinos = new System.Windows.Forms.Label();
+            this.lblPatrulla = new System.Windows.Forms.Label();
+            this.cmbSeleccionBarco = new System.Windows.Forms.ComboBox();
             this.btnAutoJ1 = new System.Windows.Forms.Button();
+            this.btnAutoJ2 = new System.Windows.Forms.Button();
+            this.btnRotar = new System.Windows.Forms.Button();
+            this.btnReacomodar = new System.Windows.Forms.Button();
+            this.btnConfirmar = new System.Windows.Forms.Button();
             this.btnReiniciar = new System.Windows.Forms.Button();
+            this.pnlMercado = new System.Windows.Forms.Panel();
+            this.cmbSelectorArmas = new System.Windows.Forms.ComboBox();
+            this.lblInventario = new System.Windows.Forms.Label();
+            this.lblPuntos = new System.Windows.Forms.Label();
+            this.pnlRadar = new System.Windows.Forms.Panel();
+            this.btnManiobraEvasion = new System.Windows.Forms.Button();
+            this.pnlInicio = new System.Windows.Forms.Panel();
+            this.btnIniciarJuego = new System.Windows.Forms.Button();
+            this.pnlMenuModos = new System.Windows.Forms.Panel();
+            this.btnModo1v1 = new System.Windows.Forms.Button();
+            this.btnModoPC = new System.Windows.Forms.Button();
+            this.btnSalirJuego = new System.Windows.Forms.Button();
             this.pnlDificultad = new System.Windows.Forms.Panel();
             this.btnVolverMenu = new System.Windows.Forms.Button();
             this.btnFacil = new System.Windows.Forms.Button();
             this.btnExperto = new System.Windows.Forms.Button();
+            this.PnlPracticas1 = new System.Windows.Forms.Panel();
             this.PnlPracticas2 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.PnlPracticas3 = new System.Windows.Forms.Panel();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
             this.PnlPracticas4 = new System.Windows.Forms.Panel();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
@@ -96,16 +95,14 @@
             this.Pnlizquierdo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.PnlCentral.SuspendLayout();
-            this.PnlPracticas1.SuspendLayout();
-            this.pnlMenuModos.SuspendLayout();
-            this.pnlInicio.SuspendLayout();
             this.pnlJuego.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvJugador1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvJugador2)).BeginInit();
             this.panel1.SuspendLayout();
+            this.pnlInicio.SuspendLayout();
+            this.pnlMenuModos.SuspendLayout();
             this.pnlDificultad.SuspendLayout();
             this.PnlPracticas2.SuspendLayout();
-            this.PnlPracticas3.SuspendLayout();
             this.PnlPracticas4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.SuspendLayout();
@@ -200,7 +197,6 @@
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(1370, 414);
@@ -236,7 +232,6 @@
             // 
             this.pictureBox3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
             this.pictureBox3.Location = new System.Drawing.Point(0, 0);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(1370, 70);
@@ -329,9 +324,12 @@
             this.PnlCentral.BackColor = System.Drawing.Color.WhiteSmoke;
             this.PnlCentral.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PnlCentral.BackgroundImage")));
             this.PnlCentral.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.PnlCentral.Controls.Add(this.PnlPracticas1);
             this.PnlCentral.Controls.Add(this.PnlPracticas2);
-            this.PnlCentral.Controls.Add(this.PnlPracticas3);
+            this.PnlCentral.Controls.Add(this.pnlJuego);
+            this.PnlCentral.Controls.Add(this.pnlDificultad);
+            this.PnlCentral.Controls.Add(this.pnlInicio);
+            this.PnlCentral.Controls.Add(this.pnlMenuModos);
+            this.PnlCentral.Controls.Add(this.PnlPracticas1);
             this.PnlCentral.Controls.Add(this.PnlPracticas4);
             this.PnlCentral.Controls.Add(this.pictureBox4);
             this.PnlCentral.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -340,93 +338,293 @@
             this.PnlCentral.Size = new System.Drawing.Size(1170, 590);
             this.PnlCentral.TabIndex = 6;
             // 
-            // PnlPracticas1
+            // pnlJuego
             // 
-            this.PnlPracticas1.BackColor = System.Drawing.Color.PaleVioletRed;
-            this.PnlPracticas1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PnlPracticas1.BackgroundImage")));
-            this.PnlPracticas1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.PnlPracticas1.Controls.Add(this.pnlInicio);
-            this.PnlPracticas1.Controls.Add(this.pnlMenuModos);
-            this.PnlPracticas1.Controls.Add(this.pnlJuego);
-            this.PnlPracticas1.Controls.Add(this.pnlDificultad);
-            this.PnlPracticas1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PnlPracticas1.Font = new System.Drawing.Font("Courier New", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PnlPracticas1.ForeColor = System.Drawing.Color.LimeGreen;
-            this.PnlPracticas1.Location = new System.Drawing.Point(0, 0);
-            this.PnlPracticas1.Name = "PnlPracticas1";
-            this.PnlPracticas1.Size = new System.Drawing.Size(1170, 590);
-            this.PnlPracticas1.TabIndex = 0;
-            this.PnlPracticas1.Visible = false;
+            this.pnlJuego.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.pnlJuego.Controls.Add(this.lblEstado);
+            this.pnlJuego.Controls.Add(this.dgvJugador1);
+            this.pnlJuego.Controls.Add(this.dgvJugador2);
+            this.pnlJuego.Controls.Add(this.panel1);
+            this.pnlJuego.Controls.Add(this.cmbSeleccionBarco);
+            this.pnlJuego.Controls.Add(this.btnAutoJ1);
+            this.pnlJuego.Controls.Add(this.btnAutoJ2);
+            this.pnlJuego.Controls.Add(this.btnRotar);
+            this.pnlJuego.Controls.Add(this.btnReacomodar);
+            this.pnlJuego.Controls.Add(this.btnConfirmar);
+            this.pnlJuego.Controls.Add(this.btnReiniciar);
+            this.pnlJuego.Controls.Add(this.pnlMercado);
+            this.pnlJuego.Controls.Add(this.cmbSelectorArmas);
+            this.pnlJuego.Controls.Add(this.lblInventario);
+            this.pnlJuego.Controls.Add(this.lblPuntos);
+            this.pnlJuego.Controls.Add(this.pnlRadar);
+            this.pnlJuego.Controls.Add(this.btnManiobraEvasion);
+            this.pnlJuego.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlJuego.Location = new System.Drawing.Point(0, 0);
+            this.pnlJuego.Name = "pnlJuego";
+            this.pnlJuego.Size = new System.Drawing.Size(1170, 590);
+            this.pnlJuego.TabIndex = 18;
             // 
-            // pnlMenuModos
+            // lblEstado
             // 
-            this.pnlMenuModos.BackColor = System.Drawing.Color.Red;
-            this.pnlMenuModos.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlMenuModos.BackgroundImage")));
-            this.pnlMenuModos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pnlMenuModos.Controls.Add(this.btnSalirJuego);
-            this.pnlMenuModos.Controls.Add(this.btnModo1v1);
-            this.pnlMenuModos.Controls.Add(this.btnModoPC);
-            this.pnlMenuModos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMenuModos.Location = new System.Drawing.Point(0, 0);
-            this.pnlMenuModos.Name = "pnlMenuModos";
-            this.pnlMenuModos.Size = new System.Drawing.Size(1170, 590);
-            this.pnlMenuModos.TabIndex = 16;
+            this.lblEstado.AutoSize = true;
+            this.lblEstado.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblEstado.Location = new System.Drawing.Point(10, 10);
+            this.lblEstado.Name = "lblEstado";
+            this.lblEstado.Size = new System.Drawing.Size(215, 13);
+            this.lblEstado.TabIndex = 4;
+            this.lblEstado.Text = "Selecciona un modo de juego para empezar";
             // 
-            // btnSalirJuego
+            // dgvJugador1
             // 
-            this.btnSalirJuego.BackColor = System.Drawing.Color.Black;
-            this.btnSalirJuego.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnSalirJuego.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
-            this.btnSalirJuego.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSalirJuego.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSalirJuego.ForeColor = System.Drawing.Color.Lime;
-            this.btnSalirJuego.Location = new System.Drawing.Point(889, 497);
-            this.btnSalirJuego.Name = "btnSalirJuego";
-            this.btnSalirJuego.Size = new System.Drawing.Size(157, 45);
-            this.btnSalirJuego.TabIndex = 2;
-            this.btnSalirJuego.Text = "salir";
-            this.btnSalirJuego.UseVisualStyleBackColor = false;
-            this.btnSalirJuego.Click += new System.EventHandler(this.btnSalirJuego_Click);
+            this.dgvJugador1.BackgroundColor = System.Drawing.Color.Black;
+            this.dgvJugador1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvJugador1.Location = new System.Drawing.Point(34, 108);
+            this.dgvJugador1.Name = "dgvJugador1";
+            this.dgvJugador1.Size = new System.Drawing.Size(290, 226);
+            this.dgvJugador1.TabIndex = 3;
             // 
-            // btnModo1v1
+            // dgvJugador2
             // 
-            this.btnModo1v1.BackColor = System.Drawing.Color.Black;
-            this.btnModo1v1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnModo1v1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnModo1v1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
-            this.btnModo1v1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnModo1v1.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnModo1v1.ForeColor = System.Drawing.Color.Lime;
-            this.btnModo1v1.Location = new System.Drawing.Point(424, 77);
-            this.btnModo1v1.Name = "btnModo1v1";
-            this.btnModo1v1.Size = new System.Drawing.Size(381, 82);
-            this.btnModo1v1.TabIndex = 0;
-            this.btnModo1v1.Text = "Jugar 1 VS 1";
-            this.btnModo1v1.UseVisualStyleBackColor = false;
-            this.btnModo1v1.Click += new System.EventHandler(this.btnModo1v1_Click);
+            this.dgvJugador2.BackgroundColor = System.Drawing.Color.Black;
+            this.dgvJugador2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvJugador2.Location = new System.Drawing.Point(402, 108);
+            this.dgvJugador2.Name = "dgvJugador2";
+            this.dgvJugador2.Size = new System.Drawing.Size(293, 226);
+            this.dgvJugador2.TabIndex = 5;
             // 
-            // btnModoPC
+            // panel1
             // 
-            this.btnModoPC.BackColor = System.Drawing.Color.Black;
-            this.btnModoPC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnModoPC.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnModoPC.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
-            this.btnModoPC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnModoPC.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnModoPC.ForeColor = System.Drawing.Color.Lime;
-            this.btnModoPC.Location = new System.Drawing.Point(424, 186);
-            this.btnModoPC.Name = "btnModoPC";
-            this.btnModoPC.Size = new System.Drawing.Size(381, 84);
-            this.btnModoPC.TabIndex = 1;
-            this.btnModoPC.Text = "Jugar VS Computadora";
-            this.btnModoPC.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnModoPC.UseVisualStyleBackColor = false;
-            this.btnModoPC.Click += new System.EventHandler(this.btnModoPC_Click);
+            this.panel1.AutoSize = true;
+            this.panel1.BackColor = System.Drawing.Color.Black;
+            this.panel1.Controls.Add(this.lblPortaaviones);
+            this.panel1.Controls.Add(this.lblAcorazado);
+            this.panel1.Controls.Add(this.lblSubmarinos);
+            this.panel1.Controls.Add(this.lblPatrulla);
+            this.panel1.Location = new System.Drawing.Point(795, 11);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(185, 88);
+            this.panel1.TabIndex = 11;
+            // 
+            // lblPortaaviones
+            // 
+            this.lblPortaaviones.AutoSize = true;
+            this.lblPortaaviones.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblPortaaviones.Location = new System.Drawing.Point(0, 39);
+            this.lblPortaaviones.Name = "lblPortaaviones";
+            this.lblPortaaviones.Size = new System.Drawing.Size(35, 13);
+            this.lblPortaaviones.TabIndex = 0;
+            this.lblPortaaviones.Text = "label4";
+            // 
+            // lblAcorazado
+            // 
+            this.lblAcorazado.AutoSize = true;
+            this.lblAcorazado.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblAcorazado.Location = new System.Drawing.Point(0, 26);
+            this.lblAcorazado.Name = "lblAcorazado";
+            this.lblAcorazado.Size = new System.Drawing.Size(35, 13);
+            this.lblAcorazado.TabIndex = 1;
+            this.lblAcorazado.Text = "label5";
+            // 
+            // lblSubmarinos
+            // 
+            this.lblSubmarinos.AutoSize = true;
+            this.lblSubmarinos.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblSubmarinos.Location = new System.Drawing.Point(0, 13);
+            this.lblSubmarinos.Name = "lblSubmarinos";
+            this.lblSubmarinos.Size = new System.Drawing.Size(35, 13);
+            this.lblSubmarinos.TabIndex = 2;
+            this.lblSubmarinos.Text = "label6";
+            // 
+            // lblPatrulla
+            // 
+            this.lblPatrulla.AutoSize = true;
+            this.lblPatrulla.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblPatrulla.Location = new System.Drawing.Point(0, 0);
+            this.lblPatrulla.Name = "lblPatrulla";
+            this.lblPatrulla.Size = new System.Drawing.Size(19, 13);
+            this.lblPatrulla.TabIndex = 3;
+            this.lblPatrulla.Text = "L7";
+            // 
+            // cmbSeleccionBarco
+            // 
+            this.cmbSeleccionBarco.BackColor = System.Drawing.Color.DarkGreen;
+            this.cmbSeleccionBarco.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSeleccionBarco.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.cmbSeleccionBarco.Font = new System.Drawing.Font("Courier New", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbSeleccionBarco.FormattingEnabled = true;
+            this.cmbSeleccionBarco.Location = new System.Drawing.Point(960, 105);
+            this.cmbSeleccionBarco.Name = "cmbSeleccionBarco";
+            this.cmbSeleccionBarco.Size = new System.Drawing.Size(180, 26);
+            this.cmbSeleccionBarco.TabIndex = 12;
+            // 
+            // btnAutoJ1
+            // 
+            this.btnAutoJ1.AutoSize = true;
+            this.btnAutoJ1.BackColor = System.Drawing.Color.DarkGreen;
+            this.btnAutoJ1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btnAutoJ1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
+            this.btnAutoJ1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAutoJ1.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAutoJ1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnAutoJ1.Location = new System.Drawing.Point(960, 142);
+            this.btnAutoJ1.Name = "btnAutoJ1";
+            this.btnAutoJ1.Size = new System.Drawing.Size(140, 32);
+            this.btnAutoJ1.TabIndex = 6;
+            this.btnAutoJ1.Text = "AUTO J1";
+            this.btnAutoJ1.UseVisualStyleBackColor = false;
+            this.btnAutoJ1.Click += new System.EventHandler(this.btnAutoJ1_Click);
+            // 
+            // btnAutoJ2
+            // 
+            this.btnAutoJ2.AutoSize = true;
+            this.btnAutoJ2.BackColor = System.Drawing.Color.DarkGreen;
+            this.btnAutoJ2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btnAutoJ2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
+            this.btnAutoJ2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAutoJ2.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAutoJ2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnAutoJ2.Location = new System.Drawing.Point(960, 182);
+            this.btnAutoJ2.Name = "btnAutoJ2";
+            this.btnAutoJ2.Size = new System.Drawing.Size(140, 32);
+            this.btnAutoJ2.TabIndex = 10;
+            this.btnAutoJ2.Text = "AUTO J2";
+            this.btnAutoJ2.UseVisualStyleBackColor = false;
+            this.btnAutoJ2.Click += new System.EventHandler(this.btnAutoJ2_Click);
+            // 
+            // btnRotar
+            // 
+            this.btnRotar.AutoSize = true;
+            this.btnRotar.BackColor = System.Drawing.Color.DarkGreen;
+            this.btnRotar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btnRotar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
+            this.btnRotar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRotar.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRotar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnRotar.Location = new System.Drawing.Point(960, 222);
+            this.btnRotar.Name = "btnRotar";
+            this.btnRotar.Size = new System.Drawing.Size(140, 32);
+            this.btnRotar.TabIndex = 7;
+            this.btnRotar.Text = "GIRAR";
+            this.btnRotar.UseVisualStyleBackColor = false;
+            this.btnRotar.Click += new System.EventHandler(this.btnRotar_Click);
+            // 
+            // btnReacomodar
+            // 
+            this.btnReacomodar.AutoSize = true;
+            this.btnReacomodar.BackColor = System.Drawing.Color.Black;
+            this.btnReacomodar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btnReacomodar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnReacomodar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReacomodar.Location = new System.Drawing.Point(960, 262);
+            this.btnReacomodar.Name = "btnReacomodar";
+            this.btnReacomodar.Size = new System.Drawing.Size(140, 32);
+            this.btnReacomodar.TabIndex = 8;
+            this.btnReacomodar.Text = "REACOMODAR";
+            this.btnReacomodar.UseVisualStyleBackColor = false;
+            this.btnReacomodar.Click += new System.EventHandler(this.btnReacomodar_Click);
+            // 
+            // btnConfirmar
+            // 
+            this.btnConfirmar.AutoSize = true;
+            this.btnConfirmar.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnConfirmar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btnConfirmar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnConfirmar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnConfirmar.Location = new System.Drawing.Point(960, 302);
+            this.btnConfirmar.Name = "btnConfirmar";
+            this.btnConfirmar.Size = new System.Drawing.Size(140, 32);
+            this.btnConfirmar.TabIndex = 13;
+            this.btnConfirmar.Text = "CONFIRMAR";
+            this.btnConfirmar.UseVisualStyleBackColor = false;
+            this.btnConfirmar.Click += new System.EventHandler(this.btnConfirmar_Click);
+            // 
+            // btnReiniciar
+            // 
+            this.btnReiniciar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnReiniciar.AutoSize = true;
+            this.btnReiniciar.BackColor = System.Drawing.Color.Black;
+            this.btnReiniciar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btnReiniciar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnReiniciar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReiniciar.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnReiniciar.ForeColor = System.Drawing.Color.Lime;
+            this.btnReiniciar.Location = new System.Drawing.Point(56, 520);
+            this.btnReiniciar.Name = "btnReiniciar";
+            this.btnReiniciar.Size = new System.Drawing.Size(140, 32);
+            this.btnReiniciar.TabIndex = 2;
+            this.btnReiniciar.Text = "REINICIAR";
+            this.btnReiniciar.UseVisualStyleBackColor = false;
+            this.btnReiniciar.Click += new System.EventHandler(this.btnReiniciar_Click);
+            // 
+            // pnlMercado
+            // 
+            this.pnlMercado.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlMercado.BackColor = System.Drawing.Color.Black;
+            this.pnlMercado.Location = new System.Drawing.Point(290, 0);
+            this.pnlMercado.Name = "pnlMercado";
+            this.pnlMercado.Size = new System.Drawing.Size(499, 95);
+            this.pnlMercado.TabIndex = 20;
+            this.pnlMercado.Visible = false;
+            // 
+            // cmbSelectorArmas
+            // 
+            this.cmbSelectorArmas.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSelectorArmas.FormattingEnabled = true;
+            this.cmbSelectorArmas.Location = new System.Drawing.Point(960, 151);
+            this.cmbSelectorArmas.Name = "cmbSelectorArmas";
+            this.cmbSelectorArmas.Size = new System.Drawing.Size(180, 21);
+            this.cmbSelectorArmas.TabIndex = 16;
+            this.cmbSelectorArmas.Visible = false;
+            // 
+            // lblInventario
+            // 
+            this.lblInventario.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblInventario.BackColor = System.Drawing.SystemColors.Desktop;
+            this.lblInventario.Location = new System.Drawing.Point(446, 480);
+            this.lblInventario.Name = "lblInventario";
+            this.lblInventario.Size = new System.Drawing.Size(400, 20);
+            this.lblInventario.TabIndex = 18;
+            this.lblInventario.Text = "label4";
+            this.lblInventario.Visible = false;
+            // 
+            // lblPuntos
+            // 
+            this.lblPuntos.AutoSize = true;
+            this.lblPuntos.BackColor = System.Drawing.SystemColors.Desktop;
+            this.lblPuntos.Location = new System.Drawing.Point(660, 448);
+            this.lblPuntos.Name = "lblPuntos";
+            this.lblPuntos.Size = new System.Drawing.Size(35, 13);
+            this.lblPuntos.TabIndex = 17;
+            this.lblPuntos.Text = "label4";
+            this.lblPuntos.Visible = false;
+            // 
+            // pnlRadar
+            // 
+            this.pnlRadar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(20)))), ((int)(((byte)(10)))));
+            this.pnlRadar.Location = new System.Drawing.Point(953, 209);
+            this.pnlRadar.Name = "pnlRadar";
+            this.pnlRadar.Size = new System.Drawing.Size(172, 233);
+            this.pnlRadar.TabIndex = 21;
+            this.pnlRadar.Visible = false;
+            // 
+            // btnManiobraEvasion
+            // 
+            this.btnManiobraEvasion.BackColor = System.Drawing.Color.Black;
+            this.btnManiobraEvasion.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btnManiobraEvasion.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnManiobraEvasion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnManiobraEvasion.ForeColor = System.Drawing.Color.Lime;
+            this.btnManiobraEvasion.Location = new System.Drawing.Point(960, 495);
+            this.btnManiobraEvasion.Name = "btnManiobraEvasion";
+            this.btnManiobraEvasion.Size = new System.Drawing.Size(165, 30);
+            this.btnManiobraEvasion.TabIndex = 22;
+            this.btnManiobraEvasion.Text = "MANIOBRA EVASION";
+            this.btnManiobraEvasion.UseVisualStyleBackColor = false;
+            this.btnManiobraEvasion.Visible = false;
             // 
             // pnlInicio
             // 
             this.pnlInicio.BackColor = System.Drawing.Color.Black;
-            this.pnlInicio.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlInicio.BackgroundImage")));
             this.pnlInicio.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pnlInicio.Controls.Add(this.btnIniciarJuego);
             this.pnlInicio.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -438,269 +636,82 @@
             // btnIniciarJuego
             // 
             this.btnIniciarJuego.BackColor = System.Drawing.Color.Black;
-            this.btnIniciarJuego.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnIniciarJuego.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.btnIniciarJuego.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
             this.btnIniciarJuego.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnIniciarJuego.Font = new System.Drawing.Font("Castellar", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIniciarJuego.Location = new System.Drawing.Point(999, 0);
+            this.btnIniciarJuego.Location = new System.Drawing.Point(341, 235);
             this.btnIniciarJuego.Name = "btnIniciarJuego";
-            this.btnIniciarJuego.Size = new System.Drawing.Size(171, 590);
+            this.btnIniciarJuego.Size = new System.Drawing.Size(180, 40);
             this.btnIniciarJuego.TabIndex = 0;
-            this.btnIniciarJuego.Text = "EMPEZAR";
+            this.btnIniciarJuego.Text = "INICIAR MISION";
             this.btnIniciarJuego.UseVisualStyleBackColor = false;
             this.btnIniciarJuego.Click += new System.EventHandler(this.btnIniciarJuego_Click);
             // 
-            // pnlJuego
+            // pnlMenuModos
             // 
-            this.pnlJuego.BackColor = System.Drawing.Color.DarkSlateGray;
-            this.pnlJuego.Controls.Add(this.lblInventario);
-            this.pnlJuego.Controls.Add(this.lblPuntos);
-            this.pnlJuego.Controls.Add(this.cmbSelectorArmas);
-            this.pnlJuego.Controls.Add(this.lblEstado);
-            this.pnlJuego.Controls.Add(this.cmbSeleccionBarco);
-            this.pnlJuego.Controls.Add(this.dgvJugador1);
-            this.pnlJuego.Controls.Add(this.dgvJugador2);
-            this.pnlJuego.Controls.Add(this.btnConfirmar);
-            this.pnlJuego.Controls.Add(this.btnRotar);
-            this.pnlJuego.Controls.Add(this.btnAutoJ2);
-            this.pnlJuego.Controls.Add(this.btnReacomodar);
-            this.pnlJuego.Controls.Add(this.panel1);
-            this.pnlJuego.Controls.Add(this.btnAutoJ1);
-            this.pnlJuego.Controls.Add(this.btnReiniciar);
-            this.pnlJuego.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlJuego.Location = new System.Drawing.Point(0, 0);
-            this.pnlJuego.Name = "pnlJuego";
-            this.pnlJuego.Size = new System.Drawing.Size(1170, 590);
-            this.pnlJuego.TabIndex = 18;
+            this.pnlMenuModos.BackColor = System.Drawing.Color.Red;
+            this.pnlMenuModos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlMenuModos.Controls.Add(this.btnModo1v1);
+            this.pnlMenuModos.Controls.Add(this.btnModoPC);
+            this.pnlMenuModos.Controls.Add(this.btnSalirJuego);
+            this.pnlMenuModos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMenuModos.Location = new System.Drawing.Point(0, 0);
+            this.pnlMenuModos.Name = "pnlMenuModos";
+            this.pnlMenuModos.Size = new System.Drawing.Size(1170, 590);
+            this.pnlMenuModos.TabIndex = 16;
             // 
-            // lblInventario
+            // btnModo1v1
             // 
-            this.lblInventario.AutoSize = true;
-            this.lblInventario.BackColor = System.Drawing.SystemColors.Desktop;
-            this.lblInventario.Location = new System.Drawing.Point(390, 437);
-            this.lblInventario.Name = "lblInventario";
-            this.lblInventario.Size = new System.Drawing.Size(62, 18);
-            this.lblInventario.TabIndex = 18;
-            this.lblInventario.Text = "label4";
-            this.lblInventario.Visible = false;
+            this.btnModo1v1.BackColor = System.Drawing.Color.Black;
+            this.btnModo1v1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnModo1v1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
+            this.btnModo1v1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnModo1v1.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnModo1v1.ForeColor = System.Drawing.Color.Lime;
+            this.btnModo1v1.Location = new System.Drawing.Point(321, 117);
+            this.btnModo1v1.Name = "btnModo1v1";
+            this.btnModo1v1.Size = new System.Drawing.Size(240, 55);
+            this.btnModo1v1.TabIndex = 0;
+            this.btnModo1v1.Text = "JUGADOR VS JUGADOR";
+            this.btnModo1v1.UseVisualStyleBackColor = false;
+            this.btnModo1v1.Click += new System.EventHandler(this.btnModo1v1_Click);
             // 
-            // lblPuntos
+            // btnModoPC
             // 
-            this.lblPuntos.AutoSize = true;
-            this.lblPuntos.BackColor = System.Drawing.SystemColors.Desktop;
-            this.lblPuntos.Location = new System.Drawing.Point(390, 400);
-            this.lblPuntos.Name = "lblPuntos";
-            this.lblPuntos.Size = new System.Drawing.Size(62, 18);
-            this.lblPuntos.TabIndex = 17;
-            this.lblPuntos.Text = "label4";
-            this.lblPuntos.Visible = false;
+            this.btnModoPC.BackColor = System.Drawing.Color.Black;
+            this.btnModoPC.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnModoPC.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
+            this.btnModoPC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnModoPC.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnModoPC.ForeColor = System.Drawing.Color.Lime;
+            this.btnModoPC.Location = new System.Drawing.Point(321, 209);
+            this.btnModoPC.Name = "btnModoPC";
+            this.btnModoPC.Size = new System.Drawing.Size(240, 55);
+            this.btnModoPC.TabIndex = 1;
+            this.btnModoPC.Text = "JUGADOR VS PC";
+            this.btnModoPC.UseVisualStyleBackColor = false;
+            this.btnModoPC.Click += new System.EventHandler(this.btnModoPC_Click);
             // 
-            // cmbSelectorArmas
+            // btnSalirJuego
             // 
-            this.cmbSelectorArmas.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSelectorArmas.FormattingEnabled = true;
-            this.cmbSelectorArmas.Location = new System.Drawing.Point(152, 395);
-            this.cmbSelectorArmas.Name = "cmbSelectorArmas";
-            this.cmbSelectorArmas.Size = new System.Drawing.Size(207, 26);
-            this.cmbSelectorArmas.TabIndex = 16;
-            this.cmbSelectorArmas.Visible = false;
-            // 
-            // lblEstado
-            // 
-            this.lblEstado.AutoSize = true;
-            this.lblEstado.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblEstado.Location = new System.Drawing.Point(22, 36);
-            this.lblEstado.Name = "lblEstado";
-            this.lblEstado.Size = new System.Drawing.Size(368, 18);
-            this.lblEstado.TabIndex = 4;
-            this.lblEstado.Text = "Selecciona un modo de juego para empezar";
-            // 
-            // cmbSeleccionBarco
-            // 
-            this.cmbSeleccionBarco.BackColor = System.Drawing.Color.DarkGreen;
-            this.cmbSeleccionBarco.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSeleccionBarco.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.cmbSeleccionBarco.Font = new System.Drawing.Font("Courier New", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbSeleccionBarco.FormattingEnabled = true;
-            this.cmbSeleccionBarco.Location = new System.Drawing.Point(875, 133);
-            this.cmbSeleccionBarco.Name = "cmbSeleccionBarco";
-            this.cmbSeleccionBarco.Size = new System.Drawing.Size(259, 26);
-            this.cmbSeleccionBarco.TabIndex = 12;
-            // 
-            // dgvJugador1
-            // 
-            this.dgvJugador1.BackgroundColor = System.Drawing.Color.Black;
-            this.dgvJugador1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvJugador1.Location = new System.Drawing.Point(56, 115);
-            this.dgvJugador1.Name = "dgvJugador1";
-            this.dgvJugador1.Size = new System.Drawing.Size(290, 226);
-            this.dgvJugador1.TabIndex = 3;
-            // 
-            // dgvJugador2
-            // 
-            this.dgvJugador2.BackgroundColor = System.Drawing.Color.Black;
-            this.dgvJugador2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvJugador2.Location = new System.Drawing.Point(442, 118);
-            this.dgvJugador2.Name = "dgvJugador2";
-            this.dgvJugador2.Size = new System.Drawing.Size(293, 226);
-            this.dgvJugador2.TabIndex = 5;
-            // 
-            // btnConfirmar
-            // 
-            this.btnConfirmar.AutoSize = true;
-            this.btnConfirmar.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnConfirmar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.btnConfirmar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnConfirmar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnConfirmar.Location = new System.Drawing.Point(889, 375);
-            this.btnConfirmar.Name = "btnConfirmar";
-            this.btnConfirmar.Size = new System.Drawing.Size(157, 30);
-            this.btnConfirmar.TabIndex = 13;
-            this.btnConfirmar.Text = "Confirmar Flota";
-            this.btnConfirmar.UseVisualStyleBackColor = false;
-            this.btnConfirmar.Click += new System.EventHandler(this.btnConfirmar_Click);
-            // 
-            // btnRotar
-            // 
-            this.btnRotar.AutoSize = true;
-            this.btnRotar.BackColor = System.Drawing.Color.DarkGreen;
-            this.btnRotar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.btnRotar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
-            this.btnRotar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRotar.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRotar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnRotar.Location = new System.Drawing.Point(878, 274);
-            this.btnRotar.Name = "btnRotar";
-            this.btnRotar.Size = new System.Drawing.Size(120, 38);
-            this.btnRotar.TabIndex = 7;
-            this.btnRotar.Text = "Girar: Horizontal";
-            this.btnRotar.UseVisualStyleBackColor = false;
-            this.btnRotar.Click += new System.EventHandler(this.btnRotar_Click);
-            // 
-            // btnAutoJ2
-            // 
-            this.btnAutoJ2.AutoSize = true;
-            this.btnAutoJ2.BackColor = System.Drawing.Color.DarkGreen;
-            this.btnAutoJ2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.btnAutoJ2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
-            this.btnAutoJ2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAutoJ2.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAutoJ2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnAutoJ2.Location = new System.Drawing.Point(875, 230);
-            this.btnAutoJ2.Name = "btnAutoJ2";
-            this.btnAutoJ2.Size = new System.Drawing.Size(150, 38);
-            this.btnAutoJ2.TabIndex = 10;
-            this.btnAutoJ2.Text = "Llenado Automático J2";
-            this.btnAutoJ2.UseVisualStyleBackColor = false;
-            this.btnAutoJ2.Click += new System.EventHandler(this.btnAutoJ2_Click);
-            // 
-            // btnReacomodar
-            // 
-            this.btnReacomodar.AutoSize = true;
-            this.btnReacomodar.BackColor = System.Drawing.Color.Black;
-            this.btnReacomodar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.btnReacomodar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnReacomodar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReacomodar.Location = new System.Drawing.Point(860, 341);
-            this.btnReacomodar.Name = "btnReacomodar";
-            this.btnReacomodar.Size = new System.Drawing.Size(219, 30);
-            this.btnReacomodar.TabIndex = 8;
-            this.btnReacomodar.Text = "🎲 Reacomodar Mi Flota";
-            this.btnReacomodar.UseVisualStyleBackColor = false;
-            this.btnReacomodar.Click += new System.EventHandler(this.btnReacomodar_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.AutoSize = true;
-            this.panel1.BackColor = System.Drawing.Color.Black;
-            this.panel1.Controls.Add(this.lblPatrulla);
-            this.panel1.Controls.Add(this.lblSubmarinos);
-            this.panel1.Controls.Add(this.lblAcorazado);
-            this.panel1.Controls.Add(this.lblPortaaviones);
-            this.panel1.Location = new System.Drawing.Point(875, 6);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(259, 120);
-            this.panel1.TabIndex = 11;
-            // 
-            // lblPatrulla
-            // 
-            this.lblPatrulla.AutoSize = true;
-            this.lblPatrulla.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblPatrulla.Location = new System.Drawing.Point(0, 54);
-            this.lblPatrulla.Name = "lblPatrulla";
-            this.lblPatrulla.Size = new System.Drawing.Size(26, 18);
-            this.lblPatrulla.TabIndex = 3;
-            this.lblPatrulla.Text = "L7";
-            // 
-            // lblSubmarinos
-            // 
-            this.lblSubmarinos.AutoSize = true;
-            this.lblSubmarinos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblSubmarinos.Location = new System.Drawing.Point(0, 36);
-            this.lblSubmarinos.Name = "lblSubmarinos";
-            this.lblSubmarinos.Size = new System.Drawing.Size(62, 18);
-            this.lblSubmarinos.TabIndex = 2;
-            this.lblSubmarinos.Text = "label6";
-            // 
-            // lblAcorazado
-            // 
-            this.lblAcorazado.AutoSize = true;
-            this.lblAcorazado.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblAcorazado.Location = new System.Drawing.Point(0, 18);
-            this.lblAcorazado.Name = "lblAcorazado";
-            this.lblAcorazado.Size = new System.Drawing.Size(62, 18);
-            this.lblAcorazado.TabIndex = 1;
-            this.lblAcorazado.Text = "label5";
-            // 
-            // lblPortaaviones
-            // 
-            this.lblPortaaviones.AutoSize = true;
-            this.lblPortaaviones.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblPortaaviones.Location = new System.Drawing.Point(0, 0);
-            this.lblPortaaviones.Name = "lblPortaaviones";
-            this.lblPortaaviones.Size = new System.Drawing.Size(62, 18);
-            this.lblPortaaviones.TabIndex = 0;
-            this.lblPortaaviones.Text = "label4";
-            // 
-            // btnAutoJ1
-            // 
-            this.btnAutoJ1.AutoSize = true;
-            this.btnAutoJ1.BackColor = System.Drawing.Color.DarkGreen;
-            this.btnAutoJ1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.btnAutoJ1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
-            this.btnAutoJ1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAutoJ1.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAutoJ1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnAutoJ1.Location = new System.Drawing.Point(875, 186);
-            this.btnAutoJ1.Name = "btnAutoJ1";
-            this.btnAutoJ1.Size = new System.Drawing.Size(150, 38);
-            this.btnAutoJ1.TabIndex = 6;
-            this.btnAutoJ1.Text = "Llenado Automático J1";
-            this.btnAutoJ1.UseVisualStyleBackColor = false;
-            this.btnAutoJ1.Click += new System.EventHandler(this.btnAutoJ1_Click);
-            // 
-            // btnReiniciar
-            // 
-            this.btnReiniciar.AutoSize = true;
-            this.btnReiniciar.BackColor = System.Drawing.Color.Black;
-            this.btnReiniciar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.btnReiniciar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnReiniciar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReiniciar.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnReiniciar.ForeColor = System.Drawing.Color.Lime;
-            this.btnReiniciar.Location = new System.Drawing.Point(56, 483);
-            this.btnReiniciar.Name = "btnReiniciar";
-            this.btnReiniciar.Size = new System.Drawing.Size(109, 38);
-            this.btnReiniciar.TabIndex = 2;
-            this.btnReiniciar.Text = "Salir / Reiniciar";
-            this.btnReiniciar.UseVisualStyleBackColor = false;
-            this.btnReiniciar.Click += new System.EventHandler(this.btnReiniciar_Click);
+            this.btnSalirJuego.BackColor = System.Drawing.Color.Black;
+            this.btnSalirJuego.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnSalirJuego.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
+            this.btnSalirJuego.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSalirJuego.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSalirJuego.ForeColor = System.Drawing.Color.Lime;
+            this.btnSalirJuego.Location = new System.Drawing.Point(777, 370);
+            this.btnSalirJuego.Name = "btnSalirJuego";
+            this.btnSalirJuego.Size = new System.Drawing.Size(130, 35);
+            this.btnSalirJuego.TabIndex = 2;
+            this.btnSalirJuego.Text = "ABANDONAR";
+            this.btnSalirJuego.UseVisualStyleBackColor = false;
+            this.btnSalirJuego.Click += new System.EventHandler(this.btnSalirJuego_Click);
             // 
             // pnlDificultad
             // 
             this.pnlDificultad.BackColor = System.Drawing.Color.White;
-            this.pnlDificultad.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlDificultad.BackgroundImage")));
             this.pnlDificultad.Controls.Add(this.btnVolverMenu);
             this.pnlDificultad.Controls.Add(this.btnFacil);
             this.pnlDificultad.Controls.Add(this.btnExperto);
@@ -716,11 +727,11 @@
             this.btnVolverMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnVolverMenu.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnVolverMenu.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnVolverMenu.Location = new System.Drawing.Point(209, 7);
+            this.btnVolverMenu.Location = new System.Drawing.Point(402, 309);
             this.btnVolverMenu.Name = "btnVolverMenu";
-            this.btnVolverMenu.Size = new System.Drawing.Size(90, 38);
+            this.btnVolverMenu.Size = new System.Drawing.Size(110, 35);
             this.btnVolverMenu.TabIndex = 2;
-            this.btnVolverMenu.Text = "salir";
+            this.btnVolverMenu.Text = "< VOLVER";
             this.btnVolverMenu.UseVisualStyleBackColor = false;
             this.btnVolverMenu.Click += new System.EventHandler(this.btnVolverMenu_Click);
             // 
@@ -730,11 +741,11 @@
             this.btnFacil.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFacil.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFacil.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnFacil.Location = new System.Drawing.Point(0, 7);
+            this.btnFacil.Location = new System.Drawing.Point(402, 151);
             this.btnFacil.Name = "btnFacil";
-            this.btnFacil.Size = new System.Drawing.Size(90, 38);
+            this.btnFacil.Size = new System.Drawing.Size(220, 50);
             this.btnFacil.TabIndex = 0;
-            this.btnFacil.Text = "FACIL";
+            this.btnFacil.Text = "RECLUTA  (FACIL)";
             this.btnFacil.UseVisualStyleBackColor = false;
             this.btnFacil.Click += new System.EventHandler(this.btnFacil_Click);
             // 
@@ -744,13 +755,27 @@
             this.btnExperto.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExperto.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExperto.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnExperto.Location = new System.Drawing.Point(96, 7);
+            this.btnExperto.Location = new System.Drawing.Point(402, 225);
             this.btnExperto.Name = "btnExperto";
-            this.btnExperto.Size = new System.Drawing.Size(107, 57);
+            this.btnExperto.Size = new System.Drawing.Size(220, 50);
             this.btnExperto.TabIndex = 1;
-            this.btnExperto.Text = "EXTREMO";
+            this.btnExperto.Text = "ALMIRANTE (EXPERTO)";
             this.btnExperto.UseVisualStyleBackColor = false;
             this.btnExperto.Click += new System.EventHandler(this.btnExperto_Click);
+            // 
+            // PnlPracticas1
+            // 
+            this.PnlPracticas1.BackColor = System.Drawing.Color.PaleVioletRed;
+            this.PnlPracticas1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PnlPracticas1.BackgroundImage")));
+            this.PnlPracticas1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PnlPracticas1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PnlPracticas1.Font = new System.Drawing.Font("Courier New", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PnlPracticas1.ForeColor = System.Drawing.Color.LimeGreen;
+            this.PnlPracticas1.Location = new System.Drawing.Point(0, 0);
+            this.PnlPracticas1.Name = "PnlPracticas1";
+            this.PnlPracticas1.Size = new System.Drawing.Size(1170, 590);
+            this.PnlPracticas1.TabIndex = 0;
+            this.PnlPracticas1.Visible = false;
             // 
             // PnlPracticas2
             // 
@@ -803,57 +828,6 @@
             this.button3.TabIndex = 0;
             this.button3.Text = "P1";
             this.button3.UseVisualStyleBackColor = false;
-            // 
-            // PnlPracticas3
-            // 
-            this.PnlPracticas3.BackColor = System.Drawing.Color.DeepPink;
-            this.PnlPracticas3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PnlPracticas3.BackgroundImage")));
-            this.PnlPracticas3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.PnlPracticas3.Controls.Add(this.button4);
-            this.PnlPracticas3.Controls.Add(this.button5);
-            this.PnlPracticas3.Controls.Add(this.button6);
-            this.PnlPracticas3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PnlPracticas3.Location = new System.Drawing.Point(0, 0);
-            this.PnlPracticas3.Name = "PnlPracticas3";
-            this.PnlPracticas3.Size = new System.Drawing.Size(1170, 590);
-            this.PnlPracticas3.TabIndex = 7;
-            this.PnlPracticas3.Visible = false;
-            // 
-            // button4
-            // 
-            this.button4.BackColor = System.Drawing.Color.Brown;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.ForeColor = System.Drawing.Color.Black;
-            this.button4.Location = new System.Drawing.Point(234, 23);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "P3";
-            this.button4.UseVisualStyleBackColor = false;
-            // 
-            // button5
-            // 
-            this.button5.BackColor = System.Drawing.Color.Brown;
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.ForeColor = System.Drawing.Color.Black;
-            this.button5.Location = new System.Drawing.Point(134, 23);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 1;
-            this.button5.Text = "P2";
-            this.button5.UseVisualStyleBackColor = false;
-            // 
-            // button6
-            // 
-            this.button6.BackColor = System.Drawing.Color.Brown;
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.ForeColor = System.Drawing.Color.Black;
-            this.button6.Location = new System.Drawing.Point(34, 23);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 0;
-            this.button6.Text = "P1";
-            this.button6.UseVisualStyleBackColor = false;
             // 
             // PnlPracticas4
             // 
@@ -947,18 +921,16 @@
             this.Pnlizquierdo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.PnlCentral.ResumeLayout(false);
-            this.PnlPracticas1.ResumeLayout(false);
-            this.pnlMenuModos.ResumeLayout(false);
-            this.pnlInicio.ResumeLayout(false);
             this.pnlJuego.ResumeLayout(false);
             this.pnlJuego.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvJugador1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvJugador2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.pnlInicio.ResumeLayout(false);
+            this.pnlMenuModos.ResumeLayout(false);
             this.pnlDificultad.ResumeLayout(false);
             this.PnlPracticas2.ResumeLayout(false);
-            this.PnlPracticas3.ResumeLayout(false);
             this.PnlPracticas4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.ResumeLayout(false);
@@ -991,10 +963,6 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Panel PnlPracticas3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
@@ -1017,15 +985,18 @@
         private System.Windows.Forms.Button btnConfirmar;
         private System.Windows.Forms.Panel pnlInicio;
         private System.Windows.Forms.Button btnIniciarJuego;
-        private System.Windows.Forms.Panel pnlMenuModos;
         private System.Windows.Forms.Button btnSalirJuego;
+        private System.Windows.Forms.Panel pnlMenuModos;
         private System.Windows.Forms.Panel pnlDificultad;
         private System.Windows.Forms.Button btnVolverMenu;
         private System.Windows.Forms.Button btnFacil;
         private System.Windows.Forms.Button btnExperto;
         private System.Windows.Forms.Panel pnlJuego;
+        private System.Windows.Forms.Panel pnlMercado;
+        private System.Windows.Forms.ComboBox cmbSelectorArmas;
         private System.Windows.Forms.Label lblInventario;
         private System.Windows.Forms.Label lblPuntos;
-        private System.Windows.Forms.ComboBox cmbSelectorArmas;
+        private System.Windows.Forms.Panel pnlRadar;
+        private System.Windows.Forms.Button btnManiobraEvasion;
     }
 }

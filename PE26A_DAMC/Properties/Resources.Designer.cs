@@ -59,25 +59,5 @@ namespace PE26A_DAMC.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap gif_ojo_der {
-            get {
-                object obj = ResourceManager.GetObject("gif_ojo_der", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap gif_ojo_izq {
-            get {
-                object obj = ResourceManager.GetObject("gif_ojo_izq", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

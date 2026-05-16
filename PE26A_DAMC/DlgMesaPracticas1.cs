@@ -258,13 +258,13 @@ namespace PE26A_DAMC
             }
             ancho = Convert.ToInt32(TbxCaptura3.Text);
 
-            if (!EsNumero(TbxCaptur4.Text))
+            if (!EsNumero(TbxCaptura4.Text))
             {
                 MessageBox.Show("Capture altura");
-                TbxCaptur4.Focus();
+                TbxCaptura4.Focus();
                 return false;
             }
-            altura = Convert.ToInt32(TbxCaptur4.Text);
+            altura = Convert.ToInt32(TbxCaptura4.Text);
 
             return true;
         }

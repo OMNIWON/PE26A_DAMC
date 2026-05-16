@@ -694,6 +694,8 @@ namespace PE26A_DAMC
         {
             DGVmesa2panel2.Visible = !DGVmesa2panel2.Visible;
             DGVPRACTICA2P1.Visible = !DGVPRACTICA2P1.Visible;
+            PnlM2P4.Visible = !PnlM2P4.Visible;
+            panelP3.Visible = !panelP3.Visible;
         }
 
         /// <summary>

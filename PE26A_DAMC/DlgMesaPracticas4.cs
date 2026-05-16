@@ -9,54 +9,84 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Media;          // Para SystemSounds (alertas del sistema)
+using System.Media;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-// NOTA: NO se pone "using System.Windows.Media;" aquí arriba porque
-// ese namespace tiene sus propios Color, Brush, etc. que entrarían en
-// conflicto con System.Drawing. En su lugar, GestorSonido usa el
-// nombre completamente calificado: System.Windows.Media.MediaPlayer
 
 namespace PE26A_DAMC
 {
-    // ====================================================================
-    // Programacion estructurada
-    // Dialogo de la mesa practicas 4. DAMC.
-    // ====================================================================
-
     public partial class DlgMesaPracticas4 : Form
     {
         // ====================================================================
-        // 1. VARIABLES DE ESTADO Y LÓGICA BASE
+        // ENUM: ESTADO DEL JUEGO
         // ====================================================================
+        private enum EstadoJuego
+        {
+            MenuPrincipal,
+            SeleccionModo,
+            SeleccionDificultad,
+            ColocacionBarcos,
+            EnBatalla,
+            FinalizadoVictoria,
+            FinalizadoDerrota
+        }
+
+        #region ══════════════════════════════════════════════════════════════
+        // CONSTANTES GLOBALES
+        #endregion
+
+        // Tablero
+        private const int TABLERO_TAMANIO = 10;
+        private const int TAMANIO_CELDA = 30;
+        private const int CANTIDAD_BARCOS = 5;
+
+        // Economía
+        private const int PRECIO_MINA = 30;
+        private const int PRECIO_SONAR = 40;
+        private const int PRECIO_MISIL = 80;
+        private const int PUNTOS_IMPACTO = 10;
+        private const int PUNTOS_HUNDIMIENTO = 40;
+
+        // IDs de celdas
+        private const int CELDA_VACIA = 0;
+        private const int CELDA_BARCO_MIN = 10;
+        private const int CELDA_BARCO_MAX = 14;
+        private const int CELDA_IMPACTO = 2;
+        private const int CELDA_AGUA = 3;
+        private const int CELDA_SONAR = 4;
+        private const int CELDA_MINA = 20;
+        private const int CELDA_MINA_EXPLOTADA = 21;
+
+        #region ══════════════════════════════════════════════════════════════
+        // VARIABLES: ESTADO Y LÓGICA BASE
+        #endregion
+
+        private EstadoJuego estadoActual = EstadoJuego.MenuPrincipal;
         private int dificultadIA = 1;
-
-        // >>> ELIMINADA: private SoundPlayer musicaNaval;
-        // >>> Se reemplaza completamente por la clase estática GestorSonido al final del archivo.
-
-        private readonly int tamanoTablero = 10;
-        private readonly int tamanoCelda = 30;
-        private int[,] matrizJ1 = new int[10, 10];
-        private int[,] matrizJ2 = new int[10, 10];
+        private int[,] matrizJ1 = new int[TABLERO_TAMANIO, TABLERO_TAMANIO];
+        private int[,] matrizJ2 = new int[TABLERO_TAMANIO, TABLERO_TAMANIO];
         private readonly int[] flota = { 5, 4, 3, 3, 2 };
         private string[] nombresBarcos = { "Portaaviones", "Acorazado", "Submarino 1", "Submarino 2", "Patrulla" };
-        private bool[] barcosColocadosJ1 = new bool[5];
-        private bool[] barcosColocadosJ2 = new bool[5];
+        private bool[] barcosColocadosJ1 = new bool[CANTIDAD_BARCOS];
+        private bool[] barcosColocadosJ2 = new bool[CANTIDAD_BARCOS];
         private bool faseBatalla = false;
+        private bool juegoActivo = false;
         private bool modo1v1 = false;
         private int turnoBatalla = 1;
         private int turnoColocacion = 1;
         private bool esHorizontal = true;
         private List<Point> objetivosIA = new List<Point>();
 
-        // ====================================================================
-        // 2. VARIABLES DEL RADAR DINÁMICO
-        // ====================================================================
+        #region ══════════════════════════════════════════════════════════════
+        // VARIABLES: RADAR DINÁMICO
+        // pnlRadar viene del Designer — NO se declara aquí
+        #endregion
+
         private int fallosJ1 = 0;
         private int fallosJ2 = 0;
         private bool senalActiva = false;
         private bool esperandoRespuestaRadar = false;
-        private Panel pnlRadar;
+        // ── pnlRadar → declarado en Designer.cs ──────────────────────────
         private System.Windows.Forms.PictureBox pbRadar;
         private Button btnAceptarSenal;
         private Button btnDenegarSenal;
@@ -64,15 +94,16 @@ namespace PE26A_DAMC
         private int anguloRadar = 0;
         private bool parpadeoPuntoRojo = false;
 
-        // ====================================================================
-        // 3. VARIABLES: ECONOMÍA, INVENTARIO, TIENDA Y HABILIDADES
-        // ====================================================================
+        #region ══════════════════════════════════════════════════════════════
+        // VARIABLES: ECONOMÍA, INVENTARIO Y HABILIDADES
+        // pnlMercado, cmbSelectorArmas, lblInventario vienen del Designer
+        #endregion
+
         private int puntosJ1 = 0;
         private int puntosJ2 = 0;
         private int turnosExtraJ1 = 0;
         private int turnosExtraJ2 = 0;
 
-        // Inventario de armas especiales
         private int minasDisponiblesJ1 = 0;
         private int minasDisponiblesJ2 = 0;
         private int misilesDisponiblesJ1 = 0;
@@ -80,25 +111,24 @@ namespace PE26A_DAMC
         private int sonaresDisponiblesJ1 = 0;
         private int sonaresDisponiblesJ2 = 0;
 
-        // PRECIOS BALANCEADOS
-        private readonly int precioMina = 30;
-        private readonly int precioSonar = 40;
-        private readonly int precioMisil = 80;
-
-        // Controles de Tienda e Inventario (Generados por código)
-        private Panel pnlMercado;
+        // ── pnlMercado → declarado en Designer.cs ────────────────────────
         private Label lblPuntosActuales;
         private Label lblClimaGlobal;
         private Button btnComprarMina;
         private Button btnComprarMisil;
         private Button btnComprarSonar;
+        // ── cmbSelectorArmas → declarado en Designer.cs ──────────────────
+        // ── lblInventario    → declarado en Designer.cs ──────────────────
 
-        // Variables de Evasión (Submarino)
-        private Button btnManiobraEvasion;
+        #region ══════════════════════════════════════════════════════════════
+        // VARIABLES: EVASIÓN Y CLIMA
+        // btnManiobraEvasion viene del Designer
+        #endregion
+
+        // ── btnManiobraEvasion → declarado en Designer.cs ─────────────────
         private bool evasionUsadaJ1 = false;
         private bool evasionUsadaJ2 = false;
 
-        // Variables Climáticas
         private int contadorTurnosGlobales = 0;
         private int tormentaMagneticaRestante = 0;
         private int nieblaDensaRestante = 0;
@@ -116,14 +146,209 @@ namespace PE26A_DAMC
             ConstruirMercadoTáctico();
             ConstruirBotonEvasion();
 
-            // >>> ELIMINADO: bloque try/catch del SoundPlayer antiguo.
+            this.FormClosing += DlgMesaPracticas4_FormClosing;
         }
 
+        // ====================================================================
+        // EVENTOS DE FORMULARIO
+        // ====================================================================
         private void DlgMesaPracticas4_Load(object sender, EventArgs e)
         {
+            // ── Solo configuración visual ── el juego NO arranca aquí ──────
+            // Los DataGridView necesitan estar visibles para que el layout
+            // calcule tamaños correctamente, por eso esto va en Load y no
+            // en el constructor.
             ConfigurarRadarMilitar(dgvJugador1);
             ConfigurarRadarMilitar(dgvJugador2);
-            CambiarPantallaJuego(pnlInicio);
+            AplicarDisenoVisual();
+
+            // Dejar TODO apagado. El juego despierta solo cuando el usuario
+            // presiona "Iniciar Misión" (btnIniciarJuego_Click → IniciarJuegoCompleto).
+            ApagadoInicial();
+        }
+
+        private void DlgMesaPracticas4_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            GestorSonido.DetenerBGM();
+            GestorSonido.LimpiarTodo();
+            if (timerRadar != null) { timerRadar.Stop(); timerRadar.Dispose(); }
+            System.Diagnostics.Debug.WriteLine("[Mesa4] ✅ Limpieza completada al cerrar.");
+        }
+
+        // ====================================================================
+        // MÉTODOS DE CONTROL DE JUEGO
+        // ====================================================================
+
+        private void DetenerJuego()
+        {
+            juegoActivo = false;
+
+            faseBatalla = false;
+
+            estadoActual = EstadoJuego.MenuPrincipal;
+
+            esperandoRespuestaRadar = false;
+
+            senalActiva = false;
+
+            if (timerRadar != null)
+            {
+                timerRadar.Stop();
+                timerRadar.Enabled = false;
+            }
+
+            pnlRadar.Visible = false;
+            pnlMercado.Visible = false;
+            cmbSelectorArmas.Visible = false;
+            lblInventario.Visible = false;
+            btnManiobraEvasion.Visible = false;
+
+            objetivosIA.Clear();
+
+            GestorSonido.DetenerBGM();
+
+            Array.Clear(matrizJ1, 0, matrizJ1.Length);
+            Array.Clear(matrizJ2, 0, matrizJ2.Length);
+
+            DibujarTablero(dgvJugador1, matrizJ1, false);
+            DibujarTablero(dgvJugador2, matrizJ2, false);
+
+            lblEstado.Text = "Juego detenido.";
+        }
+
+        /// <summary>
+        /// Estado inicial del formulario: todo apagado, sin juego activo.
+        /// Solo se llama desde Load. El juego arranca desde IniciarJuegoCompleto.
+        /// </summary>
+        private void ApagadoInicial()
+        {
+            juegoActivo = false;
+            faseBatalla = false;
+            senalActiva = false;
+            esperandoRespuestaRadar = false;
+            estadoActual = EstadoJuego.MenuPrincipal;
+
+            // Apagar timer si ya existe (por si Load se llama más de una vez)
+            if (timerRadar != null)
+            {
+                timerRadar.Stop();
+                timerRadar.Enabled = false;
+            }
+
+            // Ocultar controles de juego
+            pnlRadar.Visible = false;
+            pnlMercado.Visible = false;
+            cmbSelectorArmas.Visible = false;
+            lblInventario.Visible = false;
+            btnManiobraEvasion.Visible = false;
+
+            // Ocultar paneles de juego, mostrar pantalla de inicio
+            if (pnlMenuModos != null) pnlMenuModos.Visible = false;
+            if (pnlDificultad != null) pnlDificultad.Visible = false;
+            if (pnlJuego != null) pnlJuego.Visible = false;
+            if (pnlInicio != null)
+            {
+                pnlInicio.Visible = true;
+                pnlInicio.BringToFront();
+            }
+        }
+
+        private void LimpiarEstadoJuego()
+        {
+            puntosJ1 = puntosJ2 = 0;
+            turnosExtraJ1 = turnosExtraJ2 = 0;
+            minasDisponiblesJ1 = minasDisponiblesJ2 = 0;
+            misilesDisponiblesJ1 = misilesDisponiblesJ2 = 0;
+            sonaresDisponiblesJ1 = sonaresDisponiblesJ2 = 0;
+            evasionUsadaJ1 = evasionUsadaJ2 = false;
+            fallosJ1 = fallosJ2 = 0;
+            contadorTurnosGlobales = 0;
+            esperandoRespuestaRadar = false;
+        }
+
+        /// <summary>
+        /// Apaga el motor del juego sin intentar redibujar tableros.
+        /// Úsalo cuando vas a cambiar de panel (prácticas) para no provocar
+        /// renders sobre controles que quedarán ocultos.
+        /// </summary>
+        private void ApagarMotorJuego()
+        {
+            juegoActivo = false;
+            faseBatalla = false;
+            senalActiva = false;
+            esperandoRespuestaRadar = false;
+            estadoActual = EstadoJuego.MenuPrincipal;
+
+            if (timerRadar != null)
+            {
+                timerRadar.Stop();
+                timerRadar.Enabled = false;
+            }
+
+            objetivosIA.Clear();
+
+            pnlRadar.Visible = false;
+            pnlMercado.Visible = false;
+            cmbSelectorArmas.Visible = false;
+            lblInventario.Visible = false;
+            btnManiobraEvasion.Visible = false;
+
+            GestorSonido.DetenerBGM();
+
+            // Limpiar matrices en memoria (sin redibujar)
+            Array.Clear(matrizJ1, 0, matrizJ1.Length);
+            Array.Clear(matrizJ2, 0, matrizJ2.Length);
+        }
+
+        private void IniciarJuegoCompleto()
+        {
+            // ── Activar el motor ─────────────────────────────────────────────
+            juegoActivo = true;
+            estadoActual = EstadoJuego.MenuPrincipal;
+
+            // Limpiar estado por si se inicia después de una partida anterior
+            LimpiarEstadoJuego();
+            objetivosIA.Clear();
+            Array.Clear(matrizJ1, 0, matrizJ1.Length);
+            Array.Clear(matrizJ2, 0, matrizJ2.Length);
+            Array.Clear(barcosColocadosJ1, 0, barcosColocadosJ1.Length);
+            Array.Clear(barcosColocadosJ2, 0, barcosColocadosJ2.Length);
+
+            // Controles de juego apagados hasta que empiece la batalla
+            pnlRadar.Visible = false;
+            pnlMercado.Visible = false;
+            cmbSelectorArmas.Visible = false;
+            lblInventario.Visible = false;
+            btnManiobraEvasion.Visible = false;
+
+            if (timerRadar != null)
+            {
+                timerRadar.Stop();
+                timerRadar.Enabled = false;
+            }
+
+            // Ocultar paneles de práctica para que no compitan con el juego
+            if (PnlPracticas1 != null) PnlPracticas1.Visible = false;
+            if (PnlPracticas2 != null) PnlPracticas2.Visible = false;
+
+            GestorSonido.ReproducirBGM("musica_menu.mp3");
+
+            // Ir al menú de selección de modo
+            CambiarPantallaJuego(pnlMenuModos);
+        }
+
+        private void CambiarPantallaJuego(Panel pantallaDestino)
+        {
+            if (pnlInicio != null) pnlInicio.Visible = false;
+            if (pnlMenuModos != null) pnlMenuModos.Visible = false;
+            if (pnlDificultad != null) pnlDificultad.Visible = false;
+            if (pnlJuego != null) pnlJuego.Visible = false;
+
+            if (pantallaDestino != null)
+            {
+                pantallaDestino.Visible = true;
+                pantallaDestino.BringToFront();
+            }
         }
 
         // ====================================================================
@@ -139,18 +364,20 @@ namespace PE26A_DAMC
         }
 
         // ====================================================================
-        // CREACIÓN DE INTERFAZ DINÁMICA (TIENDA E INVENTARIO)
+        // CREACIÓN DE INTERFAZ DINÁMICA
         // ====================================================================
+
+        /// <summary>
+        /// Construye los controles internos del pnlMercado (que ya existe en el Designer).
+        /// Solo añade los Labels y Buttons hijos — NO crea el panel ni lo añade a pnlJuego.
+        /// </summary>
         private void ConstruirMercadoTáctico()
         {
-            pnlMercado = new Panel
-            {
-                Name = "pnlMercado",
-                Size = new Size(530, 95),
-                BackColor = Color.FromArgb(0, 0, 0),
-                BorderStyle = BorderStyle.None,
-                Visible = false
-            };
+            // pnlMercado ya existe (viene del Designer) — solo configuramos su apariencia
+
+            pnlMercado.BackColor = Color.FromArgb(0, 0, 0);
+            pnlMercado.BorderStyle = BorderStyle.None;
+            pnlMercado.Visible = false;
 
             pnlMercado.Paint += (s, e) =>
             {
@@ -158,8 +385,6 @@ namespace PE26A_DAMC
                 Pen lapizVerde = new Pen(Color.FromArgb(50, 205, 50), 3);
                 e.Graphics.DrawRectangle(lapizVerde, 0, 0, pnl.Width - 1, pnl.Height - 1);
             };
-
-            pnlMercado.Location = new Point(320, 15);
 
             lblPuntosActuales = new Label
             {
@@ -181,7 +406,7 @@ namespace PE26A_DAMC
 
             btnComprarMina = new Button
             {
-                Text = $"MINA(${precioMina})",
+                Text = $"MINA(${PRECIO_MINA})",
                 BackColor = Color.DarkOliveGreen,
                 ForeColor = Color.LimeGreen,
                 Location = new Point(8, 35),
@@ -193,7 +418,7 @@ namespace PE26A_DAMC
 
             btnComprarMisil = new Button
             {
-                Text = $"MISIL DE ÁREA(${precioMisil})",
+                Text = $"MISIL DE ÁREA(${PRECIO_MISIL})",
                 BackColor = Color.DarkOliveGreen,
                 ForeColor = Color.LimeGreen,
                 Location = new Point(170, 35),
@@ -205,7 +430,7 @@ namespace PE26A_DAMC
 
             btnComprarSonar = new Button
             {
-                Text = $"SONAR 3x3 (${precioSonar})",
+                Text = $"SONAR 3x3 (${PRECIO_SONAR})",
                 BackColor = Color.DarkOliveGreen,
                 ForeColor = Color.LimeGreen,
                 Location = new Point(365, 35),
@@ -221,266 +446,43 @@ namespace PE26A_DAMC
             pnlMercado.Controls.Add(btnComprarMisil);
             pnlMercado.Controls.Add(btnComprarSonar);
 
-            cmbSelectorArmas = new ComboBox
-            {
-                Location = new Point(875, 133),
-                Size = new Size(200, 30),
-                DropDownStyle = ComboBoxStyle.DropDownList,
-                Visible = false,
-                BackColor = Color.DarkGreen,
-                ForeColor = Color.Black
-            };
+            // cmbSelectorArmas ya existe en Designer — solo configuramos
+            cmbSelectorArmas.BackColor = Color.DarkGreen;
+            cmbSelectorArmas.ForeColor = Color.Black;
             cmbSelectorArmas.Font = new Font("Consolas", 11, FontStyle.Italic);
+            cmbSelectorArmas.Visible = false;
             cmbSelectorArmas.Items.Add("Disparo Básico");
             cmbSelectorArmas.SelectedIndex = 0;
 
-            lblInventario = new Label
-            {
-                Location = new Point(440, 450),
-                Size = new Size(400, 40),
-                ForeColor = Color.Yellow,
-                Font = new Font("Consolas", 10, FontStyle.Italic),
-                Visible = false
-            };
-
-            if (pnlJuego != null)
-            {
-                pnlJuego.Controls.Add(pnlMercado);
-                pnlJuego.Controls.Add(cmbSelectorArmas);
-                pnlJuego.Controls.Add(lblInventario);
-
-                cmbSelectorArmas.BringToFront();
-                lblInventario.BringToFront();
-            }
+            // lblInventario ya existe en Designer — solo configuramos
+            lblInventario.ForeColor = Color.Yellow;
+            lblInventario.Font = new Font("Consolas", 10, FontStyle.Italic);
+            lblInventario.Visible = false;
         }
 
+        /// <summary>
+        /// Configura btnManiobraEvasion (que ya existe en el Designer).
+        /// Solo asigna el evento Click y deja Visible = false.
+        /// </summary>
         private void ConstruirBotonEvasion()
         {
-            btnManiobraEvasion = new Button
-            {
-                Text = "MANIOBRA EVASIÓN",
-                BackColor = Color.DarkRed,
-                ForeColor = Color.White,
-                Location = new Point(925, 520),
-                Size = new Size(160, 30),
-                FlatStyle = FlatStyle.Flat,
-                Visible = false
-            };
+            // btnManiobraEvasion ya existe (viene del Designer) — solo conectamos el evento
+            btnManiobraEvasion.BackColor = Color.DarkRed;
+            btnManiobraEvasion.ForeColor = Color.White;
+            btnManiobraEvasion.Visible = false;
             btnManiobraEvasion.Click += BtnManiobraEvasion_Click;
-            if (pnlJuego != null) pnlJuego.Controls.Add(btnManiobraEvasion);
         }
 
-        // ====================================================================
-        // LÓGICA DE LA TIENDA E INVENTARIO
-        // ====================================================================
-        private void ActualizarTienda()
-        {
-            int misPuntos = (turnoBatalla == 1) ? puntosJ1 : puntosJ2;
-            int misMinas = (turnoBatalla == 1) ? minasDisponiblesJ1 : minasDisponiblesJ2;
-            int misMisiles = (turnoBatalla == 1) ? misilesDisponiblesJ1 : misilesDisponiblesJ2;
-            int misSonares = (turnoBatalla == 1) ? sonaresDisponiblesJ1 : sonaresDisponiblesJ2;
-
-            lblPuntosActuales.Text = $"FONDOS J{turnoBatalla}: ${misPuntos}";
-            lblInventario.Text = $"Inventario: Minas({misMinas}) | Misiles({misMisiles}) | Sonar({misSonares})";
-
-            btnComprarMina.Enabled = (misPuntos >= precioMina);
-            btnComprarMisil.Enabled = (misPuntos >= precioMisil);
-            btnComprarSonar.Enabled = (misPuntos >= precioSonar);
-
-            string seleccionPrevia = cmbSelectorArmas.SelectedItem?.ToString();
-            cmbSelectorArmas.Items.Clear();
-            cmbSelectorArmas.Items.Add("Disparo Básico");
-            if (misMinas > 0) cmbSelectorArmas.Items.Add("Colocar Mina");
-            if (misMisiles > 0) cmbSelectorArmas.Items.Add("Misil de Área");
-            if (misSonares > 0) cmbSelectorArmas.Items.Add("Escáner Sonar");
-
-            if (seleccionPrevia != null && cmbSelectorArmas.Items.Contains(seleccionPrevia))
-                cmbSelectorArmas.SelectedItem = seleccionPrevia;
-            else
-                cmbSelectorArmas.SelectedIndex = 0;
-        }
-
-        private void BtnComprarMina_Click(object sender, EventArgs e)
-        {
-            int misPuntos = (turnoBatalla == 1) ? puntosJ1 : puntosJ2;
-            if (misPuntos >= precioMina)
-            {
-                if (turnoBatalla == 1) { puntosJ1 -= precioMina; minasDisponiblesJ1++; }
-                else { puntosJ2 -= precioMina; minasDisponiblesJ2++; }
-
-                // >>> SFX: Compra exitosa
-                GestorSonido.ReproducirSFX("sfx_compra.mp3");
-
-                ActualizarTienda();
-                MostrarAlertaMilitar(
-                    "Mina Marina comprada. Selecciónala en armas y haz clic en TU TABLERO para esconderla. Luego podrás disparar normalmente.",
-                    "Mercado Negro");
-            }
-        }
-
-        private void BtnComprarMisil_Click(object sender, EventArgs e)
-        {
-            int misPuntos = (turnoBatalla == 1) ? puntosJ1 : puntosJ2;
-            if (misPuntos >= precioMisil)
-            {
-                if (turnoBatalla == 1) { puntosJ1 -= precioMisil; misilesDisponiblesJ1++; }
-                else { puntosJ2 -= precioMisil; misilesDisponiblesJ2++; }
-
-                // >>> SFX: Compra exitosa
-                GestorSonido.ReproducirSFX("sfx_compra.mp3");
-
-                ActualizarTienda();
-                MostrarAlertaMilitar(
-                    "Misil de Área listo. Al usarlo, impactarás una celda y las 4 que la rodean (en forma de cruz). Consume tu turno.",
-                    "Mercado Negro");
-            }
-        }
-
-        private void BtnComprarSonar_Click(object sender, EventArgs e)
-        {
-            int misPuntos = (turnoBatalla == 1) ? puntosJ1 : puntosJ2;
-            if (misPuntos >= precioSonar)
-            {
-                if (turnoBatalla == 1) { puntosJ1 -= precioSonar; sonaresDisponiblesJ1++; }
-                else { puntosJ2 -= precioSonar; sonaresDisponiblesJ2++; }
-
-                // >>> SFX: Compra exitosa
-                GestorSonido.ReproducirSFX("sfx_compra.mp3");
-
-                ActualizarTienda();
-                MostrarAlertaMilitar(
-                    "Escáner Sonar activo. Revela si hay algún barco enemigo en un área de 3x3. Consume tu turno.",
-                    "Mercado Negro");
-            }
-        }
-
-        // ====================================================================
-        // LÓGICA DEL CLIMA DINÁMICO
-        // ====================================================================
-        private void ActualizarClima()
-        {
-            if (tormentaMagneticaRestante > 0) tormentaMagneticaRestante--;
-            if (nieblaDensaRestante > 0) nieblaDensaRestante--;
-
-            if (tormentaMagneticaRestante > 0)
-            {
-                lblClimaGlobal.Text = $"CLIMA: TORMENTA ({tormentaMagneticaRestante})";
-                lblClimaGlobal.ForeColor = Color.Orange;
-                pnlRadar.Enabled = false;
-            }
-            else if (nieblaDensaRestante > 0)
-            {
-                lblClimaGlobal.Text = $"CLIMA: NIEBLA ({nieblaDensaRestante})";
-                lblClimaGlobal.ForeColor = Color.LightGray;
-                pnlRadar.Enabled = true;
-            }
-            else
-            {
-                lblClimaGlobal.Text = "CLIMA: DESPEJADO";
-                lblClimaGlobal.ForeColor = Color.Cyan;
-                pnlRadar.Enabled = true;
-            }
-        }
-
-        private void TirarDadosClimaticos()
-        {
-            contadorTurnosGlobales++;
-            if (contadorTurnosGlobales % 6 == 0)
-            {
-                Random rnd = new Random();
-                int evento = rnd.Next(100);
-
-                if (evento < 30)
-                {
-                    tormentaMagneticaRestante = 2;
-                    MostrarAlertaMilitar(
-                        "Una tormenta magnética ha entrado a la zona de guerra. Los radares estarán inoperativos 2 turnos.",
-                        "Alerta Climática", true);
-                }
-                else if (evento < 60)
-                {
-                    nieblaDensaRestante = 2;
-                    MostrarAlertaMilitar(
-                        "Un banco de niebla densa cubre el mar. Los disparos fallidos al agua no serán visibles temporalmente.",
-                        "Alerta Climática");
-                }
-            }
-            ActualizarClima();
-        }
-
-        // ====================================================================
-        // LÓGICA DE INMERSIÓN DE EMERGENCIA (SUBMARINO)
-        // ====================================================================
-        private void VerificarEstadoEvasion()
-        {
-            int[,] miMatriz = (turnoBatalla == 1) ? matrizJ1 : matrizJ2;
-            bool yaUsada = (turnoBatalla == 1) ? evasionUsadaJ1 : evasionUsadaJ2;
-
-            List<int> barcosVivos = new List<int>();
-            foreach (int celda in miMatriz)
-                if (celda >= 10 && celda <= 14 && !barcosVivos.Contains(celda))
-                    barcosVivos.Add(celda);
-
-            btnManiobraEvasion.Visible =
-                (barcosVivos.Count == 1 && (barcosVivos[0] == 12 || barcosVivos[0] == 13) && !yaUsada);
-        }
-
-        private void BtnManiobraEvasion_Click(object sender, EventArgs e)
-        {
-            int[,] miMatriz = (turnoBatalla == 1) ? matrizJ1 : matrizJ2;
-            int idSubmarino = -1;
-
-            if (SigueVivo(miMatriz, 12)) idSubmarino = 12;
-            else if (SigueVivo(miMatriz, 13)) idSubmarino = 13;
-
-            if (idSubmarino != -1)
-            {
-                for (int f = 0; f < 10; f++)
-                    for (int c = 0; c < 10; c++)
-                        if (miMatriz[f, c] == idSubmarino) miMatriz[f, c] = 0;
-
-                bool reubicado = false;
-                Random rnd = new Random();
-                while (!reubicado)
-                {
-                    int f = rnd.Next(10);
-                    int c = rnd.Next(10);
-                    bool hor = rnd.Next(2) == 0;
-                    if (PuedeColocarBarco(miMatriz, f, c, 3, hor))
-                    {
-                        for (int i = 0; i < 3; i++)
-                        {
-                            if (hor) miMatriz[f, c + i] = idSubmarino;
-                            else miMatriz[f + i, c] = idSubmarino;
-                        }
-                        reubicado = true;
-                    }
-                }
-
-                MostrarAlertaMilitar(
-                    "Inmersión de emergencia ejecutada. El submarino ha reubicado su posición en el mapa.",
-                    "Maniobra Táctica", true);
-
-                if (turnoBatalla == 1) evasionUsadaJ1 = true;
-                else evasionUsadaJ2 = true;
-
-                btnManiobraEvasion.Visible = false;
-                DibujarTablero((turnoBatalla == 1) ? dgvJugador1 : dgvJugador2, miMatriz, false);
-            }
-        }
-
-        // ====================================================================
-        // CREACIÓN DEL RADAR DINÁMICO
-        // ====================================================================
+        /// <summary>
+        /// Construye los controles internos del pnlRadar (que ya existe en el Designer).
+        /// Solo añade PictureBox y botones hijos — NO crea el panel ni lo añade a pnlJuego.
+        /// </summary>
         private void ConstruirRadarDinamico()
         {
-            pnlRadar = new Panel
-            {
-                Size = new Size(160, 220),
-                BackColor = Color.FromArgb(20, 20, 20),
-                BorderStyle = BorderStyle.FixedSingle,
-                Visible = false
-            };
+            // pnlRadar ya existe (viene del Designer) — solo configuramos
+            pnlRadar.BackColor = Color.FromArgb(20, 20, 20);
+            pnlRadar.BorderStyle = BorderStyle.FixedSingle;
+            pnlRadar.Visible = false;
 
             pbRadar = new System.Windows.Forms.PictureBox
             {
@@ -518,9 +520,6 @@ namespace PE26A_DAMC
             pnlRadar.Controls.Add(btnAceptarSenal);
             pnlRadar.Controls.Add(btnDenegarSenal);
 
-            pnlRadar.Location = new Point(910, 240);
-            if (pnlJuego != null) pnlJuego.Controls.Add(pnlRadar);
-
             timerRadar = new System.Windows.Forms.Timer { Interval = 50 };
             timerRadar.Tick += (s, ev) =>
             {
@@ -556,12 +555,9 @@ namespace PE26A_DAMC
 
         private void BtnAceptarSenal_Click(object sender, EventArgs e)
         {
-            // >>> SFX: Activación del radar / intercomunicador
             GestorSonido.ReproducirSFX("sfx_radar.mp3");
-
             DesactivarSenalRadar();
-            int[,] matrizEnemiga = (turnoBatalla == 1) ? matrizJ2 : matrizJ1;
-            RevelarPistaIntercomunicador(matrizEnemiga);
+            RevelarPistaIntercomunicador((turnoBatalla == 1) ? matrizJ2 : matrizJ1);
             esperandoRespuestaRadar = false;
             FinalizarTurno();
         }
@@ -586,58 +582,213 @@ namespace PE26A_DAMC
         private void RevelarPistaIntercomunicador(int[,] matrizEnemiga)
         {
             List<Point> celdasVivas = new List<Point>();
-            for (int f = 0; f < 10; f++)
-                for (int c = 0; c < 10; c++)
-                    if (matrizEnemiga[f, c] >= 10 && matrizEnemiga[f, c] <= 14)
+            for (int f = 0; f < TABLERO_TAMANIO; f++)
+                for (int c = 0; c < TABLERO_TAMANIO; c++)
+                    if (matrizEnemiga[f, c] >= CELDA_BARCO_MIN && matrizEnemiga[f, c] <= CELDA_BARCO_MAX)
                         celdasVivas.Add(new Point(f, c));
 
-            if (celdasVivas.Count > 0)
-            {
-                Random rnd = new Random();
-                Point objetivo = celdasVivas[rnd.Next(celdasVivas.Count)];
-                char letraColumna = (char)('A' + objetivo.Y);
-                int numeroFila = objetivo.X + 1;
-                bool pistaFila = rnd.Next(2) == 0;
-                string pista = pistaFila ? $"en la Fila {numeroFila}" : $"en la Columna {letraColumna}";
+            if (celdasVivas.Count == 0) return;
 
-                MostrarAlertaMilitar(
-                    $"📡 TRANSMISIÓN DESENCRIPTADA: Comandante, inteligencia detecta emisiones térmicas enemigas {pista}.",
-                    "Radar Intercomunicador");
-            }
+            Random rnd = new Random();
+            Point objetivo = celdasVivas[rnd.Next(celdasVivas.Count)];
+            char letra = (char)('A' + objetivo.Y);
+            int fila = objetivo.X + 1;
+            string pista = (rnd.Next(2) == 0) ? $"en la Fila {fila}" : $"en la Columna {letra}";
+
+            MostrarAlertaMilitar(
+                $"📡 TRANSMISIÓN DESENCRIPTADA: Inteligencia detecta emisiones térmicas enemigas {pista}.",
+                "Radar Intercomunicador");
         }
 
         // ====================================================================
-        // GESTOR DE PANTALLAS (NAVEGACIÓN)
+        // LÓGICA DE LA TIENDA
         // ====================================================================
-        private void CambiarPantallaJuego(Panel pantallaDestino)
+        private void ActualizarTienda()
         {
-            if (pnlInicio != null) pnlInicio.Visible = false;
-            if (pnlMenuModos != null) pnlMenuModos.Visible = false;
-            if (pnlDificultad != null) pnlDificultad.Visible = false;
-            if (pnlJuego != null) pnlJuego.Visible = false;
+            int misPuntos = (turnoBatalla == 1) ? puntosJ1 : puntosJ2;
+            int misMinas = (turnoBatalla == 1) ? minasDisponiblesJ1 : minasDisponiblesJ2;
+            int misMisiles = (turnoBatalla == 1) ? misilesDisponiblesJ1 : misilesDisponiblesJ2;
+            int misSonares = (turnoBatalla == 1) ? sonaresDisponiblesJ1 : sonaresDisponiblesJ2;
 
-            if (pantallaDestino != null)
+            lblPuntosActuales.Text = $"FONDOS J{turnoBatalla}: ${misPuntos}";
+            lblInventario.Text = $"Inventario: Minas({misMinas}) | Misiles({misMisiles}) | Sonar({misSonares})";
+
+            btnComprarMina.Enabled = (misPuntos >= PRECIO_MINA);
+            btnComprarMisil.Enabled = (misPuntos >= PRECIO_MISIL);
+            btnComprarSonar.Enabled = (misPuntos >= PRECIO_SONAR);
+
+            string seleccionPrevia = cmbSelectorArmas.SelectedItem?.ToString();
+            cmbSelectorArmas.Items.Clear();
+            cmbSelectorArmas.Items.Add("Disparo Básico");
+            if (misMinas > 0) cmbSelectorArmas.Items.Add("Colocar Mina");
+            if (misMisiles > 0) cmbSelectorArmas.Items.Add("Misil de Área");
+            if (misSonares > 0) cmbSelectorArmas.Items.Add("Escáner Sonar");
+
+            if (seleccionPrevia != null && cmbSelectorArmas.Items.Contains(seleccionPrevia))
+                cmbSelectorArmas.SelectedItem = seleccionPrevia;
+            else
+                cmbSelectorArmas.SelectedIndex = 0;
+        }
+
+        private void ComprarItem(int precio, ref int puntos, ref int inventario, string nombreItem, string descripcion)
+        {
+            if (puntos >= precio)
             {
-                pantallaDestino.Visible = true;
-                pantallaDestino.BringToFront();
+                puntos -= precio;
+                inventario++;
+                GestorSonido.ReproducirSFX("sfx_compra.mp3");
+                ActualizarTienda();
+                MostrarAlertaMilitar(descripcion, "Mercado Negro");
             }
         }
 
-        // ====================================================================
-        // BOTONES DE NAVEGACIÓN PRINCIPAL
-        // ====================================================================
+        private void BtnComprarMina_Click(object sender, EventArgs e)
+        {
+            if (turnoBatalla == 1)
+                ComprarItem(PRECIO_MINA, ref puntosJ1, ref minasDisponiblesJ1, "Mina",
+                    "Mina Marina comprada. Selecciónala en armas y haz clic en TU TABLERO para esconderla.");
+            else
+                ComprarItem(PRECIO_MINA, ref puntosJ2, ref minasDisponiblesJ2, "Mina",
+                    "Mina Marina comprada. Selecciónala en armas y haz clic en TU TABLERO para esconderla.");
+        }
 
+        private void BtnComprarMisil_Click(object sender, EventArgs e)
+        {
+            if (turnoBatalla == 1)
+                ComprarItem(PRECIO_MISIL, ref puntosJ1, ref misilesDisponiblesJ1, "Misil",
+                    "Misil de Área listo. Impacta una celda y las 4 que la rodean.");
+            else
+                ComprarItem(PRECIO_MISIL, ref puntosJ2, ref misilesDisponiblesJ2, "Misil",
+                    "Misil de Área listo. Impacta una celda y las 4 que la rodean.");
+        }
+
+        private void BtnComprarSonar_Click(object sender, EventArgs e)
+        {
+            if (turnoBatalla == 1)
+                ComprarItem(PRECIO_SONAR, ref puntosJ1, ref sonaresDisponiblesJ1, "Sonar",
+                    "Escáner Sonar activo. Revela si hay barco enemigo en área 3x3.");
+            else
+                ComprarItem(PRECIO_SONAR, ref puntosJ2, ref sonaresDisponiblesJ2, "Sonar",
+                    "Escáner Sonar activo. Revela si hay barco enemigo en área 3x3.");
+        }
+
+        // ====================================================================
+        // CLIMA DINÁMICO
+        // ====================================================================
+        private void ActualizarClima()
+        {
+            if (tormentaMagneticaRestante > 0) tormentaMagneticaRestante--;
+            if (nieblaDensaRestante > 0) nieblaDensaRestante--;
+
+            if (tormentaMagneticaRestante > 0)
+            {
+                lblClimaGlobal.Text = $"CLIMA: TORMENTA ({tormentaMagneticaRestante})";
+                lblClimaGlobal.ForeColor = Color.Orange;
+                pnlRadar.Enabled = false;
+            }
+            else if (nieblaDensaRestante > 0)
+            {
+                lblClimaGlobal.Text = $"CLIMA: NIEBLA ({nieblaDensaRestante})";
+                lblClimaGlobal.ForeColor = Color.LightGray;
+                pnlRadar.Enabled = true;
+            }
+            else
+            {
+                lblClimaGlobal.Text = "CLIMA: DESPEJADO";
+                lblClimaGlobal.ForeColor = Color.Cyan;
+                pnlRadar.Enabled = true;
+            }
+        }
+
+        private void TirarDadosClimaticos()
+        {
+            contadorTurnosGlobales++;
+            if (contadorTurnosGlobales % 6 != 0) { ActualizarClima(); return; }
+
+            Random rnd = new Random();
+            int evento = rnd.Next(100);
+
+            if (evento < 30)
+            {
+                tormentaMagneticaRestante = 2;
+                MostrarAlertaMilitar(
+                    "Una tormenta magnética ha entrado a la zona. Los radares estarán inoperativos 2 turnos.",
+                    "Alerta Climática", true);
+            }
+            else if (evento < 60)
+            {
+                nieblaDensaRestante = 2;
+                MostrarAlertaMilitar(
+                    "Niebla densa cubre el mar. Los fallos al agua no serán visibles temporalmente.",
+                    "Alerta Climática");
+            }
+            ActualizarClima();
+        }
+
+        // ====================================================================
+        // EVASIÓN DE EMERGENCIA (SUBMARINO)
+        // ====================================================================
+        private void VerificarEstadoEvasion()
+        {
+            int[,] miMatriz = (turnoBatalla == 1) ? matrizJ1 : matrizJ2;
+            bool yaUsada = (turnoBatalla == 1) ? evasionUsadaJ1 : evasionUsadaJ2;
+
+            List<int> barcosVivos = new List<int>();
+            foreach (int celda in miMatriz)
+                if (celda >= CELDA_BARCO_MIN && celda <= CELDA_BARCO_MAX && !barcosVivos.Contains(celda))
+                    barcosVivos.Add(celda);
+
+            btnManiobraEvasion.Visible =
+                (barcosVivos.Count == 1 && (barcosVivos[0] == 12 || barcosVivos[0] == 13) && !yaUsada);
+        }
+
+        private void BtnManiobraEvasion_Click(object sender, EventArgs e)
+        {
+            int[,] miMatriz = (turnoBatalla == 1) ? matrizJ1 : matrizJ2;
+            int idSubmarino = SigueVivo(miMatriz, 12) ? 12 : (SigueVivo(miMatriz, 13) ? 13 : -1);
+
+            if (idSubmarino == -1) return;
+
+            for (int f = 0; f < TABLERO_TAMANIO; f++)
+                for (int c = 0; c < TABLERO_TAMANIO; c++)
+                    if (miMatriz[f, c] == idSubmarino) miMatriz[f, c] = CELDA_VACIA;
+
+            Random rnd = new Random();
+            bool reubicado = false;
+            while (!reubicado)
+            {
+                int f = rnd.Next(TABLERO_TAMANIO);
+                int c = rnd.Next(TABLERO_TAMANIO);
+                bool hor = rnd.Next(2) == 0;
+                if (PuedeColocarBarco(miMatriz, f, c, 3, hor))
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (hor) miMatriz[f, c + i] = idSubmarino;
+                        else miMatriz[f + i, c] = idSubmarino;
+                    }
+                    reubicado = true;
+                }
+            }
+
+            MostrarAlertaMilitar("Inmersión ejecutada. El submarino ha reubicado su posición.", "Maniobra Táctica", true);
+            if (turnoBatalla == 1) evasionUsadaJ1 = true; else evasionUsadaJ2 = true;
+            btnManiobraEvasion.Visible = false;
+            DibujarTablero((turnoBatalla == 1) ? dgvJugador1 : dgvJugador2, miMatriz, false);
+        }
+
+        // ====================================================================
+        // NAVEGACIÓN PRINCIPAL
+        // ====================================================================
         private void btnIniciarJuego_Click(object sender, EventArgs e)
         {
-            // >>> BGM: Música del menú al entrar al modo de juego
-            GestorSonido.ReproducirBGM("musica_menu.mp3");
-            CambiarPantallaJuego(pnlMenuModos);
+            IniciarJuegoCompleto();
         }
 
         private void btnSalirJuego_Click(object sender, EventArgs e)
         {
-            // >>> BGM: Silencio al volver a la pantalla de inicio
             GestorSonido.DetenerBGM();
+            estadoActual = EstadoJuego.MenuPrincipal;
             CambiarPantallaJuego(pnlInicio);
         }
 
@@ -650,60 +801,38 @@ namespace PE26A_DAMC
         private void btnModoPC_Click(object sender, EventArgs e)
         {
             modo1v1 = false;
+            estadoActual = EstadoJuego.SeleccionDificultad;
             CambiarPantallaJuego(pnlDificultad);
         }
 
-        private void btnVolverMenu_Click(object sender, EventArgs e)
-        {
+        private void btnVolverMenu_Click(object sender, EventArgs e) =>
             CambiarPantallaJuego(pnlMenuModos);
-        }
 
-        private void btnFacil_Click(object sender, EventArgs e)
-        {
-            dificultadIA = 0;
-            IniciarFaseColocacion();
-        }
-
-        private void btnExperto_Click(object sender, EventArgs e)
-        {
-            dificultadIA = 1;
-            IniciarFaseColocacion();
-        }
+        private void btnFacil_Click(object sender, EventArgs e) { dificultadIA = 0; IniciarFaseColocacion(); }
+        private void btnExperto_Click(object sender, EventArgs e) { dificultadIA = 1; IniciarFaseColocacion(); }
 
         private void btnReiniciar_Click(object sender, EventArgs e)
         {
-            faseBatalla = false;
-            timerRadar.Stop();
-            pnlRadar.Visible = false;
-            pnlMercado.Visible = false;
-            cmbSelectorArmas.Visible = false;
-            lblInventario.Visible = false;
-
-            // >>> BGM: Silencio al volver a inicio (la música de menú arrancará
-            //     de nuevo cuando el jugador pulse btnIniciarJuego)
-            GestorSonido.DetenerBGM();
+            DetenerJuego();
             CambiarPantallaJuego(pnlInicio);
         }
 
         // ====================================================================
-        // MOTOR DE JUEGO (ARRANQUE Y DISPAROS)
+        // MOTOR DE JUEGO — ARRANQUE
         // ====================================================================
         private void IniciarFaseColocacion()
         {
-            // >>> BGM: Música de colocación/acomodar barcos
             GestorSonido.ReproducirBGM("musica_acomodar.mp3");
-
+            estadoActual = EstadoJuego.ColocacionBarcos;
             CambiarPantallaJuego(pnlJuego);
-            faseBatalla = false; turnoColocacion = 1; objetivosIA.Clear();
-            puntosJ1 = 0; puntosJ2 = 0; turnosExtraJ1 = 0; turnosExtraJ2 = 0;
-            minasDisponiblesJ1 = 0; minasDisponiblesJ2 = 0;
-            misilesDisponiblesJ1 = 0; misilesDisponiblesJ2 = 0;
-            sonaresDisponiblesJ1 = 0; sonaresDisponiblesJ2 = 0;
-            evasionUsadaJ1 = false; evasionUsadaJ2 = false;
-            contadorTurnosGlobales = 0;
 
-            fallosJ1 = 0; fallosJ2 = 0; esperandoRespuestaRadar = false;
+            faseBatalla = false;
+            turnoColocacion = 1;
+            objetivosIA.Clear();
+
+            LimpiarEstadoJuego();
             DesactivarSenalRadar();
+
             pnlRadar.Visible = false;
             pnlMercado.Visible = false;
             btnManiobraEvasion.Visible = false;
@@ -730,77 +859,71 @@ namespace PE26A_DAMC
             if (!modo1v1)
             {
                 GenerarFlotaAleatoria(matrizJ2);
-                for (int i = 0; i < 5; i++) barcosColocadosJ2[i] = true;
+                for (int i = 0; i < CANTIDAD_BARCOS; i++) barcosColocadosJ2[i] = true;
                 DibujarTablero(dgvJugador2, matrizJ2, true);
             }
+            // Forzar posición DESPUÉS del layout
+            this.BeginInvoke(new Action(() =>
+            {
+                pnlMercado.Location = new System.Drawing.Point(260, 0); // tu Y deseada
+                lblInventario.Location = new System.Drawing.Point(446, 480); // tu Y deseada
+                this.pnlRadar.Location = new System.Drawing.Point(905, 213);
+                cmbSelectorArmas.Location = new System.Drawing.Point(910, 120);
+
+            }));
         }
 
+        // ====================================================================
+        // MOTOR DE JUEGO — DISPAROS
+        // ====================================================================
         private void ProcesarDisparo(int[,] matriz, int f, int c, DataGridView dgv)
         {
             int estadoCelda = matriz[f, c];
-            if (estadoCelda == 2 || estadoCelda == 3 || estadoCelda == 21 || estadoCelda == 4) return;
+            if (estadoCelda == CELDA_IMPACTO || estadoCelda == CELDA_AGUA ||
+                estadoCelda == CELDA_MINA_EXPLOTADA || estadoCelda == CELDA_SONAR) return;
 
             bool huboAcierto = false;
             string mensaje = "";
 
-            // ── Mina enemiga ──────────────────────────────────────────────
-            if (estadoCelda == 20)
+            if (estadoCelda == CELDA_MINA)
             {
-                // >>> SFX: Explosión de mina
                 GestorSonido.ReproducirSFX("sfx_mina.mp3");
-
-                matriz[f, c] = 21;
-                MostrarAlertaMilitar(
-                    "¡BOOOM! ¡Has impactado una mina enemiga! Pierdes tu turno y el enemigo gana una acción.",
-                    "¡TRAMPA!", true);
-
-                if (turnoBatalla == 1) turnosExtraJ2++;
-                else turnosExtraJ1++;
-
+                matriz[f, c] = CELDA_MINA_EXPLOTADA;
+                MostrarAlertaMilitar("¡BOOOM! ¡Has impactado una mina enemiga! Pierdes tu turno.", "¡TRAMPA!", true);
+                if (turnoBatalla == 1) turnosExtraJ2++; else turnosExtraJ1++;
                 DibujarTablero(dgv, matriz, true);
                 FinalizarTurno();
                 return;
             }
 
-            // ── Impacto en barco ──────────────────────────────────────────
-            if (estadoCelda >= 10 && estadoCelda <= 14)
+            if (estadoCelda >= CELDA_BARCO_MIN && estadoCelda <= CELDA_BARCO_MAX)
             {
-                matriz[f, c] = 2;
+                matriz[f, c] = CELDA_IMPACTO;
                 huboAcierto = true;
 
-                if (turnoBatalla == 1) { fallosJ1 = 0; puntosJ1 += 10; }
-                else { fallosJ2 = 0; puntosJ2 += 10; }
+                if (turnoBatalla == 1) { fallosJ1 = 0; puntosJ1 += PUNTOS_IMPACTO; }
+                else { fallosJ2 = 0; puntosJ2 += PUNTOS_IMPACTO; }
 
                 DesactivarSenalRadar();
 
                 if (!SigueVivo(matriz, estadoCelda))
                 {
-                    // >>> SFX: Barco hundido
                     GestorSonido.ReproducirSFX("sfx_hundido.mp3");
-
-                    if (turnoBatalla == 1) puntosJ1 += 40;
-                    else puntosJ2 += 40;
-
-                    mensaje = $"¡HUNDIDO! Destruiste el {nombresBarcos[estadoCelda - 10]}. ¡Tienes un tiro extra!";
+                    if (turnoBatalla == 1) puntosJ1 += PUNTOS_HUNDIMIENTO;
+                    else puntosJ2 += PUNTOS_HUNDIMIENTO;
+                    mensaje = $"¡HUNDIDO! Destruiste el {nombresBarcos[estadoCelda - CELDA_BARCO_MIN]}. ¡Tienes un tiro extra!";
                 }
                 else
                 {
-                    // >>> SFX: Impacto en barco (no hundido)
                     GestorSonido.ReproducirSFX("sfx_impacto.mp3");
-
                     mensaje = "¡IMPACTO CONFIRMADO! ¡Tienes un tiro extra!";
                 }
             }
             else
             {
-                // ── Disparo al agua ───────────────────────────────────────
-                // >>> SFX: Agua
                 GestorSonido.ReproducirSFX("sfx_agua.mp3");
-
-                matriz[f, c] = 3;
-                if (turnoBatalla == 1) fallosJ1++;
-                else fallosJ2++;
-
+                matriz[f, c] = CELDA_AGUA;
+                if (turnoBatalla == 1) fallosJ1++; else fallosJ2++;
                 mensaje = "¡DISPARO AL AGUA! 🌊";
             }
 
@@ -814,21 +937,15 @@ namespace PE26A_DAMC
             {
                 if (misTurnosExtra > 0)
                 {
-                    if (turnoBatalla == 1) turnosExtraJ1--;
-                    else turnosExtraJ2--;
-
-                    MostrarAlertaMilitar(
-                        mensaje + " Fallo, PERO el enemigo detonó una mina tuya. ¡Tienes un turno extra!",
-                        "Estrategia");
+                    if (turnoBatalla == 1) turnosExtraJ1--; else turnosExtraJ2--;
+                    MostrarAlertaMilitar(mensaje + " Fallo, PERO tienes turno extra por mina enemiga.", "Estrategia");
                     return;
                 }
 
-                int misFallosActuales = (turnoBatalla == 1) ? fallosJ1 : fallosJ2;
-                if (misFallosActuales >= 3 && !senalActiva && tormentaMagneticaRestante == 0)
+                int misFallos = (turnoBatalla == 1) ? fallosJ1 : fallosJ2;
+                if (misFallos >= 3 && !senalActiva && tormentaMagneticaRestante == 0)
                 {
-                    MostrarAlertaMilitar(
-                        mensaje + " ⚠️ ¡ALERTA! SEÑAL DE RADAR DETECTADA.",
-                        "Reporte de Artillería", true);
+                    MostrarAlertaMilitar(mensaje + " ⚠️ ¡SEÑAL DE RADAR DETECTADA.", "Reporte de Artillería", true);
                     senalActiva = true;
                     esperandoRespuestaRadar = true;
                     btnAceptarSenal.Enabled = true;
@@ -841,33 +958,30 @@ namespace PE26A_DAMC
                 }
 
                 if (VerificarVictoria(matriz)) { TerminarGuerra(); return; }
-
                 FinalizarTurno();
             }
             else
             {
                 MostrarAlertaMilitar(mensaje, "Reporte de Artillería");
                 if (VerificarVictoria(matriz)) { TerminarGuerra(); return; }
-
                 if (!modo1v1 && turnoBatalla == 2) TurnoPC();
             }
         }
 
         private async void FinalizarTurno()
         {
+            if (!juegoActivo) return;
+
             TirarDadosClimaticos();
 
             if (modo1v1)
             {
                 await Task.Delay(500);
-
                 turnoBatalla = (turnoBatalla == 1) ? 2 : 1;
                 pbRadar.Invalidate();
-
                 MostrarAlertaMilitar(
-                    $"Cambio de turno. Jugador {turnoBatalla}, siéntate al mando y presiona 'Aceptar' cuando estés listo.",
+                    $"Cambio de turno. Jugador {turnoBatalla}, siéntate al mando.",
                     "Cambio de Comandante");
-
                 PrepararTablerosParaTurno();
             }
             else
@@ -884,20 +998,22 @@ namespace PE26A_DAMC
         // ====================================================================
         private void TurnoPC()
         {
+            if (!juegoActivo) return;
+
             Application.DoEvents();
             System.Threading.Thread.Sleep(600);
 
             Random rnd = new Random();
-            int f = 0, c = 0;
             bool disparoValido = false;
+            int f = 0, c = 0;
 
             if (dificultadIA == 1 && objetivosIA.Count > 0)
             {
                 Point p = objetivosIA[0]; objetivosIA.RemoveAt(0);
                 f = p.X; c = p.Y;
-                if (f >= 0 && f < 10 && c >= 0 && c < 10 &&
-                    matrizJ1[f, c] != 2 && matrizJ1[f, c] != 3 &&
-                    matrizJ1[f, c] != 21 && matrizJ1[f, c] != 4)
+                if (f >= 0 && f < TABLERO_TAMANIO && c >= 0 && c < TABLERO_TAMANIO &&
+                    matrizJ1[f, c] != CELDA_IMPACTO && matrizJ1[f, c] != CELDA_AGUA &&
+                    matrizJ1[f, c] != CELDA_MINA_EXPLOTADA && matrizJ1[f, c] != CELDA_SONAR)
                     disparoValido = true;
             }
 
@@ -905,9 +1021,9 @@ namespace PE26A_DAMC
             {
                 while (!disparoValido)
                 {
-                    f = rnd.Next(10); c = rnd.Next(10);
-                    if (matrizJ1[f, c] != 2 && matrizJ1[f, c] != 3 &&
-                        matrizJ1[f, c] != 21 && matrizJ1[f, c] != 4)
+                    f = rnd.Next(TABLERO_TAMANIO); c = rnd.Next(TABLERO_TAMANIO);
+                    if (matrizJ1[f, c] != CELDA_IMPACTO && matrizJ1[f, c] != CELDA_AGUA &&
+                        matrizJ1[f, c] != CELDA_MINA_EXPLOTADA && matrizJ1[f, c] != CELDA_SONAR)
                         disparoValido = true;
                 }
             }
@@ -915,13 +1031,11 @@ namespace PE26A_DAMC
             int celda = matrizJ1[f, c];
             bool acierto = false;
 
-            if (celda == 20)
+            if (celda == CELDA_MINA)
             {
-                // >>> SFX: PC detona mina
                 GestorSonido.ReproducirSFX("sfx_mina.mp3");
-
-                matrizJ1[f, c] = 21;
-                MostrarAlertaMilitar("¡La PC ha detonado tu mina! Pierde su turno y ganas una acción.", "¡BOOM!", true);
+                matrizJ1[f, c] = CELDA_MINA_EXPLOTADA;
+                MostrarAlertaMilitar("¡La PC ha detonado tu mina! Pierde su turno.", "¡BOOM!", true);
                 turnosExtraJ1++;
                 DibujarTablero(dgvJugador1, matrizJ1, false);
                 turnoBatalla = 1;
@@ -929,33 +1043,27 @@ namespace PE26A_DAMC
                 return;
             }
 
-            if (celda >= 10 && celda <= 14)
+            if (celda >= CELDA_BARCO_MIN && celda <= CELDA_BARCO_MAX)
             {
-                matrizJ1[f, c] = 2;
+                matrizJ1[f, c] = CELDA_IMPACTO;
                 acierto = true;
                 if (dificultadIA == 1) AgregarObjetivosA_MemoriaIA(f, c);
 
                 if (!SigueVivo(matrizJ1, celda))
                 {
-                    // >>> SFX: PC hunde un barco tuyo
                     GestorSonido.ReproducirSFX("sfx_hundido.mp3");
-                    MostrarAlertaMilitar(
-                        $"¡ALERTA! La PC ha hundido tu {nombresBarcos[celda - 10]}. Y va a volver a disparar.",
-                        "Ataque Enemigo", true);
+                    MostrarAlertaMilitar($"¡La PC ha hundido tu {nombresBarcos[celda - CELDA_BARCO_MIN]}!", "Ataque Enemigo", true);
                 }
                 else
                 {
-                    // >>> SFX: PC impacta un barco tuyo
                     GestorSonido.ReproducirSFX("sfx_impacto.mp3");
-                    MostrarAlertaMilitar("La PC ha impactado uno de tus barcos. Y va a volver a disparar.", "Ataque Enemigo");
+                    MostrarAlertaMilitar("La PC ha impactado uno de tus barcos.", "Ataque Enemigo");
                 }
             }
             else
             {
-                // >>> SFX: PC dispara al agua
                 GestorSonido.ReproducirSFX("sfx_agua.mp3");
-
-                matrizJ1[f, c] = 3;
+                matrizJ1[f, c] = CELDA_AGUA;
                 MostrarAlertaMilitar("La PC disparó al agua. Ahora es tu turno.", "Ataque Enemigo");
             }
 
@@ -964,12 +1072,7 @@ namespace PE26A_DAMC
 
             if (VerificarVictoria(matrizJ1)) { TerminarGuerra(); return; }
 
-            if (!acierto)
-            {
-                turnoBatalla = 1;
-                pbRadar.Invalidate();
-                PrepararTablerosParaTurno();
-            }
+            if (!acierto) { turnoBatalla = 1; pbRadar.Invalidate(); PrepararTablerosParaTurno(); }
             else TurnoPC();
         }
 
@@ -981,236 +1084,202 @@ namespace PE26A_DAMC
             {
                 int nFila = filaHit + dirFila[i];
                 int nCol = colHit + dirCol[i];
-                if (nFila >= 0 && nFila < 10 && nCol >= 0 && nCol < 10 &&
-                    matrizJ1[nFila, nCol] != 2 && matrizJ1[nFila, nCol] != 3)
+                if (nFila >= 0 && nFila < TABLERO_TAMANIO && nCol >= 0 && nCol < TABLERO_TAMANIO &&
+                    matrizJ1[nFila, nCol] != CELDA_IMPACTO && matrizJ1[nFila, nCol] != CELDA_AGUA)
                     objetivosIA.Insert(0, new Point(nFila, nCol));
             }
         }
 
         private void TerminarGuerra()
         {
-            faseBatalla = false;
+            DetenerJuego();
+            estadoActual = (turnoBatalla == 1) ? EstadoJuego.FinalizadoVictoria : EstadoJuego.FinalizadoDerrota;
+
             string ganador = (turnoBatalla == 1)
                 ? "¡JUGADOR 1 GANA LA GUERRA!"
                 : (modo1v1 ? "¡JUGADOR 2 GANA LA GUERRA!" : "¡LA PC GANA LA GUERRA!");
 
             lblEstado.Text = ganador;
 
-            pnlRadar.Visible = false;
-            pnlMercado.Visible = false;
-            btnManiobraEvasion.Visible = false;
-            timerRadar.Stop();
-            cmbSelectorArmas.Visible = false;
-            lblInventario.Visible = false;
-
-            // >>> BGM: Silencio al terminar la partida
-            GestorSonido.DetenerBGM();
-
-            MostrarAlertaMilitar(ganador, "FIN DEL JUEGO", true);
-
             btnAutoJ1.Visible = btnAutoJ2.Visible = btnRotar.Visible =
             btnReacomodar.Visible = btnConfirmar.Visible = false;
             if (cmbSeleccionBarco != null) cmbSeleccionBarco.Visible = false;
+
+            MostrarAlertaMilitar(ganador, "FIN DEL JUEGO", true);
         }
 
         // ====================================================================
-        // EVENTOS CLIC EN TABLERO E INVENTARIO DE ARMAS
+        // EVENTOS: CLIC EN TABLERO
         // ====================================================================
         private void Tablero_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            if (!juegoActivo) return;
+
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
             DataGridView dgv = (DataGridView)sender;
 
             if (faseBatalla && esperandoRespuestaRadar)
             {
-                MostrarAlertaMilitar("¡Comandante, atienda la señal del radar antes de continuar!", "Radar Activo", true);
+                MostrarAlertaMilitar("¡Atienda la señal del radar antes de continuar!", "Radar Activo", true);
                 return;
             }
 
-            if (!faseBatalla)
-            {
-                if (cmbSeleccionBarco.SelectedIndex == -1) return;
-                int[,] matrizAfectada = (turnoColocacion == 1) ? matrizJ1 : matrizJ2;
-                bool[] colocadosActual = (turnoColocacion == 1) ? barcosColocadosJ1 : barcosColocadosJ2;
-
-                if (turnoColocacion == 1 && dgv != dgvJugador1) return;
-                if (turnoColocacion == 2 && dgv != dgvJugador2) return;
-
-                int indiceBarco = cmbSeleccionBarco.SelectedIndex;
-                if (colocadosActual[indiceBarco])
-                {
-                    MostrarAlertaMilitar("¡Ya desplegaste este barco! Elige otro o dale a Reacomodar.", "Atención");
-                    return;
-                }
-
-                int tamano = flota[indiceBarco];
-                int idBarco = 10 + indiceBarco;
-
-                if (PuedeColocarBarco(matrizAfectada, e.RowIndex, e.ColumnIndex, tamano, esHorizontal))
-                {
-                    for (int i = 0; i < tamano; i++)
-                    {
-                        if (esHorizontal) matrizAfectada[e.RowIndex, e.ColumnIndex + i] = idBarco;
-                        else matrizAfectada[e.RowIndex + i, e.ColumnIndex] = idBarco;
-                    }
-                    colocadosActual[indiceBarco] = true;
-                    DibujarTablero(dgv, matrizAfectada, false);
-                    ActualizarLabels(matrizAfectada, colocadosActual);
-                }
-                else MostrarAlertaMilitar("¡Posición inválida! El barco choca o sale del mapa.", "Error Táctico");
-            }
-            else
-            {
-                string armaSeleccionada = cmbSelectorArmas.SelectedItem?.ToString() ?? "Disparo Básico";
-
-                // ── Colocar Mina ──────────────────────────────────────────
-                if (armaSeleccionada == "Colocar Mina")
-                {
-                    if (turnoBatalla == 1 && dgv != dgvJugador1)
-                    { MostrarAlertaMilitar("Debes colocar la mina en TU propio tablero.", "Error"); return; }
-                    if (turnoBatalla == 2 && dgv != dgvJugador2)
-                    { MostrarAlertaMilitar("Debes colocar la mina en TU propio tablero.", "Error"); return; }
-
-                    int[,] miMatriz = (turnoBatalla == 1) ? matrizJ1 : matrizJ2;
-                    if (miMatriz[e.RowIndex, e.ColumnIndex] == 0)
-                    {
-                        miMatriz[e.RowIndex, e.ColumnIndex] = 20;
-                        if (turnoBatalla == 1) minasDisponiblesJ1--;
-                        else minasDisponiblesJ2--;
-
-                        MostrarAlertaMilitar(
-                            "Mina colocada en el agua con éxito. Ahora realiza tu disparo a la flota enemiga.",
-                            "Estrategia");
-                        DibujarTablero(dgv, miMatriz, false);
-                        cmbSelectorArmas.SelectedIndex = 0;
-                        ActualizarTienda();
-                        return;
-                    }
-                    else { MostrarAlertaMilitar("Celda ocupada. Busca agua libre.", "Error"); return; }
-                }
-
-                // ── Escáner Sonar ─────────────────────────────────────────
-                if (armaSeleccionada == "Escáner Sonar")
-                {
-                    if (turnoBatalla == 1 && dgv != dgvJugador2)
-                    { MostrarAlertaMilitar("Apunta al tablero enemigo.", "Error"); return; }
-                    if (turnoBatalla == 2 && dgv != dgvJugador1)
-                    { MostrarAlertaMilitar("Apunta al tablero enemigo.", "Error"); return; }
-
-                    int[,] matrizObjetivo = (turnoBatalla == 1) ? matrizJ2 : matrizJ1;
-                    bool detectado = false;
-
-                    for (int i = -1; i <= 1; i++)
-                    {
-                        for (int j = -1; j <= 1; j++)
-                        {
-                            int nf = e.RowIndex + i;
-                            int nc = e.ColumnIndex + j;
-                            if (nf >= 0 && nf < 10 && nc >= 0 && nc < 10)
-                            {
-                                int celda = matrizObjetivo[nf, nc];
-                                if (celda >= 10 && celda <= 14) detectado = true;
-                                else if (celda == 0) matrizObjetivo[nf, nc] = 4;
-                            }
-                        }
-                    }
-
-                    if (turnoBatalla == 1) sonaresDisponiblesJ1--;
-                    else sonaresDisponiblesJ2--;
-
-                    // >>> SFX: Uso del sonar/radar
-                    GestorSonido.ReproducirSFX("sfx_radar.mp3");
-
-                    DibujarTablero(dgv, matrizObjetivo, true);
-
-                    if (detectado)
-                        MostrarAlertaMilitar(
-                            "¡SEÑALES TÉRMICAS CONFIRMADAS! Hay fuerte presencia naval enemiga en el área escaneada. Nota: El agua vacía ha sido marcada de verde.",
-                            "Sonar Satelital", true);
-                    else
-                        MostrarAlertaMilitar(
-                            "El sonar no detecta actividad en este sector. Zona despejada marcada en verde.",
-                            "Sonar Satelital");
-
-                    ActualizarTienda();
-                    FinalizarTurno();
-                    return;
-                }
-
-                // ── Misil de Área ─────────────────────────────────────────
-                if (armaSeleccionada == "Misil de Área")
-                {
-                    if (turnoBatalla == 1 && dgv != dgvJugador2)
-                    { MostrarAlertaMilitar("Apunta al tablero enemigo.", "Error"); return; }
-                    if (turnoBatalla == 2 && dgv != dgvJugador1)
-                    { MostrarAlertaMilitar("Apunta al tablero enemigo.", "Error"); return; }
-
-                    int[,] matrizObjetivo = (turnoBatalla == 1) ? matrizJ2 : matrizJ1;
-                    int[] dirF = { 0, -1, 1, 0, 0 };
-                    int[] dirC = { 0, 0, 0, -1, 1 };
-                    int aciertos = 0;
-
-                    for (int i = 0; i < 5; i++)
-                    {
-                        int nf = e.RowIndex + dirF[i];
-                        int nc = e.ColumnIndex + dirC[i];
-                        if (nf >= 0 && nf < 10 && nc >= 0 && nc < 10)
-                        {
-                            int celda = matrizObjetivo[nf, nc];
-                            if (celda >= 10 && celda <= 14)
-                            {
-                                matrizObjetivo[nf, nc] = 2;
-                                aciertos++;
-                                if (turnoBatalla == 1) puntosJ1 += 10; else puntosJ2 += 10;
-                                if (!SigueVivo(matrizObjetivo, celda))
-                                {
-                                    if (turnoBatalla == 1) puntosJ1 += 40; else puntosJ2 += 40;
-                                }
-                            }
-                            else if (celda == 0 || celda == 4)
-                            {
-                                matrizObjetivo[nf, nc] = 3;
-                            }
-                            else if (celda == 20)
-                            {
-                                matrizObjetivo[nf, nc] = 21;
-                                if (turnoBatalla == 1) turnosExtraJ2++; else turnosExtraJ1++;
-                                GestorSonido.ReproducirSFX("sfx_mina.mp3");
-                                MostrarAlertaMilitar(
-                                    "¡El misil detonó una mina enemiga! El rival gana un turno extra.",
-                                    "Daño Colateral", true);
-                            }
-                        }
-                    }
-
-                    if (turnoBatalla == 1) misilesDisponiblesJ1--;
-                    else misilesDisponiblesJ2--;
-
-                    // >>> SFX: Impactos del misil
-                    if (aciertos > 0) GestorSonido.ReproducirSFX("sfx_impacto.mp3");
-                    else GestorSonido.ReproducirSFX("sfx_agua.mp3");
-
-                    MostrarAlertaMilitar($"¡MISIL DETONADO! Impactos a barcos enemigos: {aciertos}", "Reporte de Artillería");
-
-                    DibujarTablero(dgv, matrizObjetivo, true);
-                    ActualizarLabels(matrizObjetivo, null);
-                    ActualizarTienda();
-
-                    if (VerificarVictoria(matrizObjetivo)) { TerminarGuerra(); return; }
-
-                    FinalizarTurno();
-                    return;
-                }
-
-                // ── Disparo Básico ────────────────────────────────────────
-                if (turnoBatalla == 1 && dgv != dgvJugador2) return;
-                if (turnoBatalla == 2 && dgv != dgvJugador1) return;
-
-                int[,] objetivo = (turnoBatalla == 1) ? matrizJ2 : matrizJ1;
-                ProcesarDisparo(objetivo, e.RowIndex, e.ColumnIndex, dgv);
-            }
+            if (!faseBatalla) { ManejarColocacion(dgv, e); }
+            else { ManejarDisparo(dgv, e); }
         }
 
+        private void ManejarColocacion(DataGridView dgv, DataGridViewCellMouseEventArgs e)
+        {
+            if (cmbSeleccionBarco.SelectedIndex == -1) return;
+
+            int[,] matrizAfectada = (turnoColocacion == 1) ? matrizJ1 : matrizJ2;
+            bool[] colocadosActual = (turnoColocacion == 1) ? barcosColocadosJ1 : barcosColocadosJ2;
+
+            if (turnoColocacion == 1 && dgv != dgvJugador1) return;
+            if (turnoColocacion == 2 && dgv != dgvJugador2) return;
+
+            int indiceBarco = cmbSeleccionBarco.SelectedIndex;
+            if (colocadosActual[indiceBarco])
+            {
+                MostrarAlertaMilitar("¡Ya desplegaste este barco! Elige otro o dale a Reacomodar.", "Atención");
+                return;
+            }
+
+            int tamano = flota[indiceBarco];
+            int idBarco = CELDA_BARCO_MIN + indiceBarco;
+
+            if (PuedeColocarBarco(matrizAfectada, e.RowIndex, e.ColumnIndex, tamano, esHorizontal))
+            {
+                for (int i = 0; i < tamano; i++)
+                {
+                    if (esHorizontal) matrizAfectada[e.RowIndex, e.ColumnIndex + i] = idBarco;
+                    else matrizAfectada[e.RowIndex + i, e.ColumnIndex] = idBarco;
+                }
+                colocadosActual[indiceBarco] = true;
+                DibujarTablero(dgv, matrizAfectada, false);
+                ActualizarLabels(matrizAfectada, colocadosActual);
+            }
+            else MostrarAlertaMilitar("¡Posición inválida! El barco choca o sale del mapa.", "Error Táctico");
+        }
+
+        private void ManejarDisparo(DataGridView dgv, DataGridViewCellMouseEventArgs e)
+        {
+            string arma = cmbSelectorArmas.SelectedItem?.ToString() ?? "Disparo Básico";
+
+            if (arma == "Colocar Mina") { ManejarColocacionMina(dgv, e); }
+            else if (arma == "Escáner Sonar") { ManejarSonar(dgv, e); }
+            else if (arma == "Misil de Área") { ManejarMisil(dgv, e); }
+            else { ManejarDisparoBasico(dgv, e); }
+        }
+
+        private void ManejarColocacionMina(DataGridView dgv, DataGridViewCellMouseEventArgs e)
+        {
+            if (turnoBatalla == 1 && dgv != dgvJugador1) { MostrarAlertaMilitar("Coloca la mina en TU tablero.", "Error"); return; }
+            if (turnoBatalla == 2 && dgv != dgvJugador2) { MostrarAlertaMilitar("Coloca la mina en TU tablero.", "Error"); return; }
+
+            int[,] miMatriz = (turnoBatalla == 1) ? matrizJ1 : matrizJ2;
+            if (miMatriz[e.RowIndex, e.ColumnIndex] != CELDA_VACIA)
+            { MostrarAlertaMilitar("Celda ocupada. Busca agua libre.", "Error"); return; }
+
+            miMatriz[e.RowIndex, e.ColumnIndex] = CELDA_MINA;
+            if (turnoBatalla == 1) minasDisponiblesJ1--; else minasDisponiblesJ2--;
+
+            MostrarAlertaMilitar("Mina colocada. Ahora realiza tu disparo a la flota enemiga.", "Estrategia");
+            DibujarTablero(dgv, miMatriz, false);
+            cmbSelectorArmas.SelectedIndex = 0;
+            ActualizarTienda();
+        }
+
+        private void ManejarSonar(DataGridView dgv, DataGridViewCellMouseEventArgs e)
+        {
+            if (turnoBatalla == 1 && dgv != dgvJugador2) { MostrarAlertaMilitar("Apunta al tablero enemigo.", "Error"); return; }
+            if (turnoBatalla == 2 && dgv != dgvJugador1) { MostrarAlertaMilitar("Apunta al tablero enemigo.", "Error"); return; }
+
+            int[,] matrizObjetivo = (turnoBatalla == 1) ? matrizJ2 : matrizJ1;
+            bool detectado = false;
+
+            for (int i = -1; i <= 1; i++)
+                for (int j = -1; j <= 1; j++)
+                {
+                    int nf = e.RowIndex + i, nc = e.ColumnIndex + j;
+                    if (nf < 0 || nf >= TABLERO_TAMANIO || nc < 0 || nc >= TABLERO_TAMANIO) continue;
+                    int celda = matrizObjetivo[nf, nc];
+                    if (celda >= CELDA_BARCO_MIN && celda <= CELDA_BARCO_MAX) detectado = true;
+                    else if (celda == CELDA_VACIA) matrizObjetivo[nf, nc] = CELDA_SONAR;
+                }
+
+            if (turnoBatalla == 1) sonaresDisponiblesJ1--; else sonaresDisponiblesJ2--;
+
+            GestorSonido.ReproducirSFX("sfx_radar.mp3");
+            DibujarTablero(dgv, matrizObjetivo, true);
+            MostrarAlertaMilitar(
+                detectado ? "¡SEÑALES TÉRMICAS! Hay presencia naval enemiga en el área escaneada."
+                          : "El sonar no detecta actividad en este sector.",
+                "Sonar Satelital", detectado);
+            ActualizarTienda();
+            FinalizarTurno();
+        }
+
+        private void ManejarMisil(DataGridView dgv, DataGridViewCellMouseEventArgs e)
+        {
+            if (turnoBatalla == 1 && dgv != dgvJugador2) { MostrarAlertaMilitar("Apunta al tablero enemigo.", "Error"); return; }
+            if (turnoBatalla == 2 && dgv != dgvJugador1) { MostrarAlertaMilitar("Apunta al tablero enemigo.", "Error"); return; }
+
+            int[,] matrizObjetivo = (turnoBatalla == 1) ? matrizJ2 : matrizJ1;
+            int[] dirF = { 0, -1, 1, 0, 0 };
+            int[] dirC = { 0, 0, 0, -1, 1 };
+            int aciertos = 0;
+
+            for (int i = 0; i < 5; i++)
+            {
+                int nf = e.RowIndex + dirF[i], nc = e.ColumnIndex + dirC[i];
+                if (nf < 0 || nf >= TABLERO_TAMANIO || nc < 0 || nc >= TABLERO_TAMANIO) continue;
+                int celda = matrizObjetivo[nf, nc];
+
+                if (celda >= CELDA_BARCO_MIN && celda <= CELDA_BARCO_MAX)
+                {
+                    matrizObjetivo[nf, nc] = CELDA_IMPACTO;
+                    aciertos++;
+                    if (turnoBatalla == 1) puntosJ1 += PUNTOS_IMPACTO; else puntosJ2 += PUNTOS_IMPACTO;
+                    if (!SigueVivo(matrizObjetivo, celda))
+                        if (turnoBatalla == 1) puntosJ1 += PUNTOS_HUNDIMIENTO; else puntosJ2 += PUNTOS_HUNDIMIENTO;
+                }
+                else if (celda == CELDA_VACIA || celda == CELDA_SONAR)
+                    matrizObjetivo[nf, nc] = CELDA_AGUA;
+                else if (celda == CELDA_MINA)
+                {
+                    matrizObjetivo[nf, nc] = CELDA_MINA_EXPLOTADA;
+                    if (turnoBatalla == 1) turnosExtraJ2++; else turnosExtraJ1++;
+                    GestorSonido.ReproducirSFX("sfx_mina.mp3");
+                    MostrarAlertaMilitar("¡El misil detonó una mina! El rival gana un turno extra.", "Daño Colateral", true);
+                }
+            }
+
+            if (turnoBatalla == 1) misilesDisponiblesJ1--; else misilesDisponiblesJ2--;
+
+            GestorSonido.ReproducirSFX(aciertos > 0 ? "sfx_impacto.mp3" : "sfx_agua.mp3");
+            MostrarAlertaMilitar($"¡MISIL DETONADO! Impactos: {aciertos}", "Reporte de Artillería");
+
+            DibujarTablero(dgv, matrizObjetivo, true);
+            ActualizarLabels(matrizObjetivo, null);
+            ActualizarTienda();
+
+            if (VerificarVictoria(matrizObjetivo)) { TerminarGuerra(); return; }
+            FinalizarTurno();
+        }
+
+        private void ManejarDisparoBasico(DataGridView dgv, DataGridViewCellMouseEventArgs e)
+        {
+            if (turnoBatalla == 1 && dgv != dgvJugador2) return;
+            if (turnoBatalla == 2 && dgv != dgvJugador1) return;
+
+            int[,] objetivo = (turnoBatalla == 1) ? matrizJ2 : matrizJ1;
+            ProcesarDisparo(objetivo, e.RowIndex, e.ColumnIndex, dgv);
+        }
+
+        // ====================================================================
+        // BOTONES DE COLOCACIÓN
+        // ====================================================================
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
             bool[] colocadosActual = (turnoColocacion == 1) ? barcosColocadosJ1 : barcosColocadosJ2;
@@ -1232,11 +1301,12 @@ namespace PE26A_DAMC
             }
             else
             {
-                // >>> BGM: Música de batalla al confirmar flotas
                 GestorSonido.ReproducirBGM("musica_batalla.mp3");
+                estadoActual = EstadoJuego.EnBatalla;
+                faseBatalla = true;
+                turnoBatalla = 1;
 
-                faseBatalla = true; turnoBatalla = 1;
-                btnAutoJ1.Visible = btnAutoJ2.Visible = btnRotar.Visible = false;
+                btnAutoJ1.Visible = btnAutoJ2.Visible = btnRotar.Visible =
                 btnReacomodar.Visible = btnConfirmar.Visible = false;
                 if (cmbSeleccionBarco != null) cmbSeleccionBarco.Visible = false;
 
@@ -1246,18 +1316,60 @@ namespace PE26A_DAMC
                 lblInventario.Visible = true;
                 timerRadar.Start();
 
-                MostrarAlertaMilitar(
-                    "¡Todas las flotas han sido desplegadas!\n\nJugador 1, te toca iniciar el ataque.",
-                    "¡A LA BATALLA!");
-
+                MostrarAlertaMilitar("¡Todas las flotas desplegadas!\n\nJugador 1, inicia el ataque.", "¡A LA BATALLA!");
                 PrepararTablerosParaTurno();
                 ActualizarLabels(matrizJ1, null);
                 ActualizarTienda();
             }
+            // Forzar posición DESPUÉS del layout
+            this.BeginInvoke(new Action(() =>
+            {
+                pnlMercado.Location = new System.Drawing.Point(260, 0); // tu Y deseada
+                lblInventario.Location = new System.Drawing.Point(446, 480); // tu Y deseada
+                this.pnlRadar.Location = new System.Drawing.Point(905, 213);
+                cmbSelectorArmas.Location = new System.Drawing.Point(910, 120);
+
+
+            }));
+        }
+
+        private void btnRotar_Click(object sender, EventArgs e)
+        {
+            esHorizontal = !esHorizontal;
+            btnRotar.Text = esHorizontal ? "Girar: Horizontal" : "Girar: Vertical";
+        }
+
+        private void btnAutoJ1_Click(object sender, EventArgs e)
+        {
+            GenerarFlotaAleatoria(matrizJ1);
+            for (int i = 0; i < CANTIDAD_BARCOS; i++) barcosColocadosJ1[i] = true;
+            DibujarTablero(dgvJugador1, matrizJ1, false);
+            ActualizarLabels(matrizJ1, barcosColocadosJ1);
+        }
+
+        private void btnAutoJ2_Click(object sender, EventArgs e)
+        {
+            GenerarFlotaAleatoria(matrizJ2);
+            for (int i = 0; i < CANTIDAD_BARCOS; i++) barcosColocadosJ2[i] = true;
+            DibujarTablero(dgvJugador2, matrizJ2, false);
+            ActualizarLabels(matrizJ2, barcosColocadosJ2);
+        }
+
+        private void btnReacomodar_Click(object sender, EventArgs e)
+        {
+            int[,] matrizAfectada = (turnoColocacion == 1) ? matrizJ1 : matrizJ2;
+            bool[] colocadosActual = (turnoColocacion == 1) ? barcosColocadosJ1 : barcosColocadosJ2;
+            DataGridView dgv = (turnoColocacion == 1) ? dgvJugador1 : dgvJugador2;
+
+            Array.Clear(matrizAfectada, 0, matrizAfectada.Length);
+            Array.Clear(colocadosActual, 0, colocadosActual.Length);
+            if (cmbSeleccionBarco.Items.Count > 0) cmbSeleccionBarco.SelectedIndex = 0;
+            DibujarTablero(dgv, matrizAfectada, false);
+            ActualizarLabels(matrizAfectada, colocadosActual);
         }
 
         // ====================================================================
-        // FUNCIONES GRÁFICAS Y UTILIDADES
+        // GRÁFICOS Y UTILIDADES
         // ====================================================================
         private void ConfigurarRadarMilitar(DataGridView dgv)
         {
@@ -1269,7 +1381,6 @@ namespace PE26A_DAMC
             dgv.ScrollBars = ScrollBars.None;
             dgv.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgv.MultiSelect = false;
-
             dgv.BackgroundColor = Color.Black;
             dgv.GridColor = Color.LimeGreen;
             dgv.DefaultCellStyle.BackColor = Color.Black;
@@ -1283,55 +1394,57 @@ namespace PE26A_DAMC
 
             dgv.Columns.Clear(); dgv.Rows.Clear();
             char letra = 'A';
-            for (int i = 0; i < tamanoTablero; i++)
+            for (int i = 0; i < TABLERO_TAMANIO; i++)
             {
                 dgv.Columns.Add($"col{i}", letra.ToString());
-                dgv.Columns[i].Width = tamanoCelda;
+                dgv.Columns[i].Width = TAMANIO_CELDA;
                 dgv.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
                 dgv.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 letra++;
             }
-            for (int i = 0; i < tamanoTablero; i++)
+            for (int i = 0; i < TABLERO_TAMANIO; i++)
             {
                 dgv.Rows.Add();
-                dgv.Rows[i].Height = tamanoCelda;
+                dgv.Rows[i].Height = TAMANIO_CELDA;
                 dgv.Rows[i].HeaderCell.Value = (i + 1).ToString();
             }
             dgv.RowHeadersWidth = 50;
-            dgv.Width = (tamanoCelda * tamanoTablero) + dgv.RowHeadersWidth + 3;
-            dgv.Height = (tamanoCelda * tamanoTablero) + dgv.ColumnHeadersHeight + 3;
+            dgv.Width = (TAMANIO_CELDA * TABLERO_TAMANIO) + dgv.RowHeadersWidth + 3;
+            dgv.Height = (TAMANIO_CELDA * TABLERO_TAMANIO) + dgv.ColumnHeadersHeight + 3;
         }
 
         private void DibujarTablero(DataGridView dgv, int[,] matriz, bool ocultarBarcos)
         {
-            for (int f = 0; f < tamanoTablero; f++)
-            {
-                for (int c = 0; c < tamanoTablero; c++)
+            for (int f = 0; f < TABLERO_TAMANIO; f++)
+                for (int c = 0; c < TABLERO_TAMANIO; c++)
                 {
                     int estado = matriz[f, c];
                     DataGridViewCell celda = dgv.Rows[f].Cells[c];
 
-                    if (estado == 0)
+                    if (estado == CELDA_VACIA)
                     { celda.Style.BackColor = Color.Black; celda.Value = ""; }
-                    else if (estado >= 10 && estado <= 14)
-                    { celda.Style.BackColor = ocultarBarcos ? Color.Black : Color.Gray; celda.Value = ocultarBarcos ? "" : "🚢"; }
-                    else if (estado == 20)
-                    { celda.Style.BackColor = ocultarBarcos ? Color.Black : Color.DarkOrange; celda.Value = ocultarBarcos ? "" : "💣"; }
-                    else if (estado == 2)
-                    { celda.Style.BackColor = Color.DarkRed; celda.Value = "💥"; }
-                    else if (estado == 21)
-                    { celda.Style.BackColor = Color.DarkMagenta; celda.Value = "🎇"; }
-                    else if (estado == 4)
-                    { celda.Style.BackColor = Color.DarkGreen; celda.Value = "🔍"; }
-                    else if (estado == 3)
+                    else if (estado >= CELDA_BARCO_MIN && estado <= CELDA_BARCO_MAX)
                     {
-                        if (nieblaDensaRestante > 0)
-                        { celda.Style.BackColor = Color.Black; celda.Value = ""; }
-                        else
-                        { celda.Style.BackColor = Color.DarkBlue; celda.Value = "🌊"; }
+                        celda.Style.BackColor = ocultarBarcos ? Color.Black : Color.Gray;
+                        celda.Value = ocultarBarcos ? "" : "🚢";
+                    }
+                    else if (estado == CELDA_MINA)
+                    {
+                        celda.Style.BackColor = ocultarBarcos ? Color.Black : Color.DarkOrange;
+                        celda.Value = ocultarBarcos ? "" : "💣";
+                    }
+                    else if (estado == CELDA_IMPACTO)
+                    { celda.Style.BackColor = Color.DarkRed; celda.Value = "💥"; }
+                    else if (estado == CELDA_MINA_EXPLOTADA)
+                    { celda.Style.BackColor = Color.DarkMagenta; celda.Value = "🎇"; }
+                    else if (estado == CELDA_SONAR)
+                    { celda.Style.BackColor = Color.DarkGreen; celda.Value = "🔍"; }
+                    else if (estado == CELDA_AGUA)
+                    {
+                        celda.Style.BackColor = nieblaDensaRestante > 0 ? Color.Black : Color.DarkBlue;
+                        celda.Value = nieblaDensaRestante > 0 ? "" : "🌊";
                     }
                 }
-            }
             dgv.ClearSelection();
         }
 
@@ -1356,48 +1469,11 @@ namespace PE26A_DAMC
 
         private void CargarMenuBarcos()
         {
-            if (cmbSeleccionBarco != null)
-            {
-                cmbSeleccionBarco.Items.Clear();
-                for (int i = 0; i < flota.Length; i++)
-                    cmbSeleccionBarco.Items.Add($"{nombresBarcos[i]} ({flota[i]} celdas)");
-                cmbSeleccionBarco.SelectedIndex = 0;
-            }
-        }
-
-        private void btnRotar_Click(object sender, EventArgs e)
-        {
-            esHorizontal = !esHorizontal;
-            btnRotar.Text = esHorizontal ? "Girar: Horizontal" : "Girar: Vertical";
-        }
-
-        private void btnAutoJ1_Click(object sender, EventArgs e)
-        {
-            GenerarFlotaAleatoria(matrizJ1);
-            for (int i = 0; i < 5; i++) barcosColocadosJ1[i] = true;
-            DibujarTablero(dgvJugador1, matrizJ1, false);
-            ActualizarLabels(matrizJ1, barcosColocadosJ1);
-        }
-
-        private void btnAutoJ2_Click(object sender, EventArgs e)
-        {
-            GenerarFlotaAleatoria(matrizJ2);
-            for (int i = 0; i < 5; i++) barcosColocadosJ2[i] = true;
-            DibujarTablero(dgvJugador2, matrizJ2, false);
-            ActualizarLabels(matrizJ2, barcosColocadosJ2);
-        }
-
-        private void btnReacomodar_Click(object sender, EventArgs e)
-        {
-            int[,] matrizAfectada = (turnoColocacion == 1) ? matrizJ1 : matrizJ2;
-            bool[] colocadosActual = (turnoColocacion == 1) ? barcosColocadosJ1 : barcosColocadosJ2;
-            DataGridView dgv = (turnoColocacion == 1) ? dgvJugador1 : dgvJugador2;
-
-            Array.Clear(matrizAfectada, 0, matrizAfectada.Length);
-            Array.Clear(colocadosActual, 0, colocadosActual.Length);
-            if (cmbSeleccionBarco.Items.Count > 0) cmbSeleccionBarco.SelectedIndex = 0;
-            DibujarTablero(dgv, matrizAfectada, false);
-            ActualizarLabels(matrizAfectada, colocadosActual);
+            if (cmbSeleccionBarco == null) return;
+            cmbSeleccionBarco.Items.Clear();
+            for (int i = 0; i < flota.Length; i++)
+                cmbSeleccionBarco.Items.Add($"{nombresBarcos[i]} ({flota[i]} celdas)");
+            cmbSeleccionBarco.SelectedIndex = 0;
         }
 
         private void ActualizarLabels(int[,] matriz, bool[] colocados)
@@ -1406,28 +1482,27 @@ namespace PE26A_DAMC
             {
                 lblPortaaviones.Text = $"Portaaviones [5]: {(colocados[0] ? "Desplegado" : "Falta 1")}";
                 lblAcorazado.Text = $"Acorazado [4]: {(colocados[1] ? "Desplegado" : "Falta 1")}";
-                int subsColocados = (colocados[2] ? 1 : 0) + (colocados[3] ? 1 : 0);
-                if (subsColocados == 0) lblSubmarinos.Text = "Submarinos [3]: Faltan 2";
-                else if (subsColocados == 1) lblSubmarinos.Text = "Submarinos [3]: Falta 1";
-                else lblSubmarinos.Text = "Submarinos [3]: Desplegados";
+                int subs = (colocados[2] ? 1 : 0) + (colocados[3] ? 1 : 0);
+                lblSubmarinos.Text = subs == 0 ? "Submarinos [3]: Faltan 2"
+                                     : subs == 1 ? "Submarinos [3]: Falta 1"
+                                                 : "Submarinos [3]: Desplegados";
                 lblPatrulla.Text = $"Patrulla [2]: {(colocados[4] ? "Desplegado" : "Falta 1")}";
             }
             else
             {
                 lblPortaaviones.Text = $"Portaaviones: {VerificarEstadoBarco(matriz, 10)}";
                 lblAcorazado.Text = $"Acorazado: {VerificarEstadoBarco(matriz, 11)}";
-                int subsVivos = (VerificarEstadoBarco(matriz, 12) == "VIVO" ? 1 : 0)
-                              + (VerificarEstadoBarco(matriz, 13) == "VIVO" ? 1 : 0);
+                int subsVivos = (SigueVivo(matriz, 12) ? 1 : 0) + (SigueVivo(matriz, 13) ? 1 : 0);
                 lblSubmarinos.Text = $"Submarinos: {subsVivos}/2 Vivos";
                 lblPatrulla.Text = $"Patrulla: {VerificarEstadoBarco(matriz, 14)}";
             }
         }
 
-        private string VerificarEstadoBarco(int[,] matriz, int idBarco)
-        {
-            foreach (int celda in matriz) if (celda == idBarco) return "VIVO";
-            return "HUNDIDO 💥";
-        }
+        // ====================================================================
+        // UTILIDADES PURAS
+        // ====================================================================
+        private string VerificarEstadoBarco(int[,] matriz, int idBarco) =>
+            SigueVivo(matriz, idBarco) ? "VIVO" : "HUNDIDO 💥";
 
         private bool SigueVivo(int[,] matriz, int idBarco)
         {
@@ -1437,7 +1512,8 @@ namespace PE26A_DAMC
 
         private bool VerificarVictoria(int[,] matriz)
         {
-            foreach (int celda in matriz) if (celda >= 10 && celda <= 14) return false;
+            foreach (int celda in matriz)
+                if (celda >= CELDA_BARCO_MIN && celda <= CELDA_BARCO_MAX) return false;
             return true;
         }
 
@@ -1448,11 +1524,11 @@ namespace PE26A_DAMC
             for (int x = 0; x < flota.Length; x++)
             {
                 bool colocado = false;
-                int idBarco = 10 + x;
+                int idBarco = CELDA_BARCO_MIN + x;
                 while (!colocado)
                 {
-                    int f = rnd.Next(10);
-                    int c = rnd.Next(10);
+                    int f = rnd.Next(TABLERO_TAMANIO);
+                    int c = rnd.Next(TABLERO_TAMANIO);
                     bool hor = rnd.Next(2) == 0;
                     if (PuedeColocarBarco(matriz, f, c, flota[x], hor))
                     {
@@ -1471,15 +1547,15 @@ namespace PE26A_DAMC
         {
             if (h)
             {
-                if (c + t > 10) return false;
+                if (c + t > TABLERO_TAMANIO) return false;
                 for (int i = 0; i < t; i++)
-                    if (matriz[f, c + i] != 0 && matriz[f, c + i] != 20) return false;
+                    if (matriz[f, c + i] != CELDA_VACIA && matriz[f, c + i] != CELDA_MINA) return false;
             }
             else
             {
-                if (f + t > 10) return false;
+                if (f + t > TABLERO_TAMANIO) return false;
                 for (int i = 0; i < t; i++)
-                    if (matriz[f + i, c] != 0 && matriz[f + i, c] != 20) return false;
+                    if (matriz[f + i, c] != CELDA_VACIA && matriz[f + i, c] != CELDA_MINA) return false;
             }
             return true;
         }
@@ -1489,19 +1565,43 @@ namespace PE26A_DAMC
         // ====================================================================
         private void BtnPractica1_Click(object sender, EventArgs e)
         {
-            PnlPracticas1.Visible = !PnlPracticas1.Visible;
+            // Apagar el motor sin redibujar tableros
+            ApagarMotorJuego();
+            LimpiarEstadoJuego();
+
+            // Ocultar los paneles del juego explícitamente
+            if (pnlInicio != null) pnlInicio.Visible = false;
+            if (pnlMenuModos != null) pnlMenuModos.Visible = false;
+            if (pnlDificultad != null) pnlDificultad.Visible = false;
+            if (pnlJuego != null) pnlJuego.Visible = false;
+
+            // Alternar panel de práctica 1, cerrar práctica 2
             PnlPracticas2.Visible = false;
-            PnlPracticas4.Visible = false;
+            PnlPracticas1.Visible = !PnlPracticas1.Visible;
+
+            if (PnlPracticas1.Visible)
+                PnlPracticas1.BringToFront();
         }
 
         private void BtnPractica2_Click(object sender, EventArgs e)
         {
-            PnlPracticas2.Visible = !PnlPracticas2.Visible;
+            // Apagar el motor sin redibujar tableros
+            ApagarMotorJuego();
+            LimpiarEstadoJuego();
+
+            // Ocultar los paneles del juego explícitamente
+            if (pnlInicio != null) pnlInicio.Visible = false;
+            if (pnlMenuModos != null) pnlMenuModos.Visible = false;
+            if (pnlDificultad != null) pnlDificultad.Visible = false;
+            if (pnlJuego != null) pnlJuego.Visible = false;
+
+            // Alternar panel de práctica 2, cerrar práctica 1
             PnlPracticas1.Visible = false;
-            PnlPracticas4.Visible = false;
+            PnlPracticas2.Visible = !PnlPracticas2.Visible;
+
+            if (PnlPracticas2.Visible)
+                PnlPracticas2.BringToFront();
         }
+
     }
-
-    
 }
-

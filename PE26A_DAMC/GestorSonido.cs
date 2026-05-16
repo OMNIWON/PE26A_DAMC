@@ -103,6 +103,27 @@ namespace PE26A_DAMC
                 System.Diagnostics.Debug.WriteLine($"[GestorSonido] SFX error '{nombreArchivo}': {ex.Message}");
             }
         }
-        
+
+        // Limpieza forzada de todos los recursos (llamar al cerrar el formulario)
+        public static void LimpiarTodo()
+        {
+            try
+            {
+                reproductorBGM.Stop();
+                reproductorBGM.Close();
+
+                if (loopSuscrito)
+                {
+                    reproductorBGM.MediaEnded -= BGM_Loop;
+                    loopSuscrito = false;
+                }
+
+                System.Diagnostics.Debug.WriteLine("[GestorSonido] ✅ Limpieza completada.");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[GestorSonido] LimpiarTodo error: {ex.Message}");
+            }
+        }
     }
 }

@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DlgMesaPracticas2));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.PnlSuperior = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -64,15 +64,16 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblModelo = new System.Windows.Forms.Label();
             this.PnlCentral = new System.Windows.Forms.Panel();
+            this.PnlPracticas4 = new System.Windows.Forms.Panel();
+            this.PnlM2P4 = new System.Windows.Forms.Panel();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.Btn1Practic4 = new System.Windows.Forms.Button();
             this.PnlPracticas3 = new System.Windows.Forms.Panel();
             this.panelP3 = new System.Windows.Forms.Panel();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.Btn1Practic3mesa2 = new System.Windows.Forms.Button();
-            this.PnlPracticas4 = new System.Windows.Forms.Panel();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.Btn1Practic4 = new System.Windows.Forms.Button();
             this.PnlPracticas2 = new System.Windows.Forms.Panel();
             this.BTN4PANEL2 = new System.Windows.Forms.Button();
             this.DGVmesa2panel2 = new System.Windows.Forms.DataGridView();
@@ -86,7 +87,6 @@
             this.Btn1Practica2Panel1 = new System.Windows.Forms.Button();
             this.timerProgreso = new System.Windows.Forms.Timer(this.components);
             this.BTNmatrizPractica2 = new System.Windows.Forms.Button();
-            this.PnlM2P4 = new System.Windows.Forms.Panel();
             this.circularPictureBox4 = new PE26A_DAMC.CircularPictureBox();
             this.circularPictureBox3 = new PE26A_DAMC.CircularPictureBox();
             this.circularPictureBox2 = new PE26A_DAMC.CircularPictureBox();
@@ -106,8 +106,8 @@
             this.PnlMioBtnsM2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.PnlCentral.SuspendLayout();
-            this.PnlPracticas3.SuspendLayout();
             this.PnlPracticas4.SuspendLayout();
+            this.PnlPracticas3.SuspendLayout();
             this.PnlPracticas2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVmesa2panel2)).BeginInit();
             this.PnlPracticas1.SuspendLayout();
@@ -530,15 +530,84 @@
             this.PnlCentral.BackColor = System.Drawing.Color.WhiteSmoke;
             this.PnlCentral.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PnlCentral.BackgroundImage")));
             this.PnlCentral.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PnlCentral.Controls.Add(this.PnlPracticas1);
             this.PnlCentral.Controls.Add(this.PnlPracticas4);
             this.PnlCentral.Controls.Add(this.PnlPracticas3);
             this.PnlCentral.Controls.Add(this.PnlPracticas2);
-            this.PnlCentral.Controls.Add(this.PnlPracticas1);
             this.PnlCentral.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PnlCentral.Location = new System.Drawing.Point(200, 87);
             this.PnlCentral.Name = "PnlCentral";
             this.PnlCentral.Size = new System.Drawing.Size(1127, 486);
             this.PnlCentral.TabIndex = 6;
+            // 
+            // PnlPracticas4
+            // 
+            this.PnlPracticas4.BackColor = System.Drawing.Color.DeepPink;
+            this.PnlPracticas4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PnlPracticas4.BackgroundImage")));
+            this.PnlPracticas4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PnlPracticas4.Controls.Add(this.PnlM2P4);
+            this.PnlPracticas4.Controls.Add(this.button4);
+            this.PnlPracticas4.Controls.Add(this.button5);
+            this.PnlPracticas4.Controls.Add(this.Btn1Practic4);
+            this.PnlPracticas4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PnlPracticas4.Location = new System.Drawing.Point(0, 0);
+            this.PnlPracticas4.Name = "PnlPracticas4";
+            this.PnlPracticas4.Size = new System.Drawing.Size(1127, 486);
+            this.PnlPracticas4.TabIndex = 7;
+            this.PnlPracticas4.Visible = false;
+            // 
+            // PnlM2P4
+            // 
+            this.PnlM2P4.Location = new System.Drawing.Point(58, 67);
+            this.PnlM2P4.Name = "PnlM2P4";
+            this.PnlM2P4.Size = new System.Drawing.Size(1034, 377);
+            this.PnlM2P4.TabIndex = 3;
+            this.PnlM2P4.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.Crimson;
+            this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Font = new System.Drawing.Font("Copperplate Gothic Light", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.ForeColor = System.Drawing.Color.White;
+            this.button4.Location = new System.Drawing.Point(234, 12);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(90, 34);
+            this.button4.TabIndex = 2;
+            this.button4.Text = "P3";
+            this.button4.UseVisualStyleBackColor = false;
+            // 
+            // button5
+            // 
+            this.button5.BackColor = System.Drawing.Color.Crimson;
+            this.button5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button5.Font = new System.Drawing.Font("Copperplate Gothic Light", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.ForeColor = System.Drawing.Color.White;
+            this.button5.Location = new System.Drawing.Point(134, 12);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(90, 34);
+            this.button5.TabIndex = 1;
+            this.button5.Text = "P2";
+            this.button5.UseVisualStyleBackColor = false;
+            // 
+            // Btn1Practic4
+            // 
+            this.Btn1Practic4.BackColor = System.Drawing.Color.Crimson;
+            this.Btn1Practic4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.Btn1Practic4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.Btn1Practic4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn1Practic4.Font = new System.Drawing.Font("Copperplate Gothic Light", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Btn1Practic4.ForeColor = System.Drawing.Color.White;
+            this.Btn1Practic4.Location = new System.Drawing.Point(34, 12);
+            this.Btn1Practic4.Name = "Btn1Practic4";
+            this.Btn1Practic4.Size = new System.Drawing.Size(90, 34);
+            this.Btn1Practic4.TabIndex = 0;
+            this.Btn1Practic4.Text = "P1";
+            this.Btn1Practic4.UseVisualStyleBackColor = false;
             // 
             // PnlPracticas3
             // 
@@ -558,6 +627,7 @@
             // 
             // panelP3
             // 
+            this.panelP3.BackColor = System.Drawing.Color.DeepPink;
             this.panelP3.Location = new System.Drawing.Point(89, 89);
             this.panelP3.Name = "panelP3";
             this.panelP3.Size = new System.Drawing.Size(877, 355);
@@ -565,7 +635,10 @@
             // 
             // button7
             // 
-            this.button7.BackColor = System.Drawing.Color.Brown;
+            this.button7.BackColor = System.Drawing.Color.Crimson;
+            this.button7.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.button7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.button7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.Font = new System.Drawing.Font("Palatino Linotype", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.ForeColor = System.Drawing.SystemColors.ButtonFace;
@@ -578,7 +651,10 @@
             // 
             // button8
             // 
-            this.button8.BackColor = System.Drawing.Color.Brown;
+            this.button8.BackColor = System.Drawing.Color.Crimson;
+            this.button8.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.button8.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.button8.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.Font = new System.Drawing.Font("Palatino Linotype", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button8.ForeColor = System.Drawing.SystemColors.ButtonFace;
@@ -591,7 +667,10 @@
             // 
             // Btn1Practic3mesa2
             // 
-            this.Btn1Practic3mesa2.BackColor = System.Drawing.Color.Brown;
+            this.Btn1Practic3mesa2.BackColor = System.Drawing.Color.Crimson;
+            this.Btn1Practic3mesa2.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Btn1Practic3mesa2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.Btn1Practic3mesa2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.Btn1Practic3mesa2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn1Practic3mesa2.Font = new System.Drawing.Font("Palatino Linotype", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Btn1Practic3mesa2.ForeColor = System.Drawing.SystemColors.ButtonFace;
@@ -602,58 +681,6 @@
             this.Btn1Practic3mesa2.Text = "P1";
             this.Btn1Practic3mesa2.UseVisualStyleBackColor = false;
             this.Btn1Practic3mesa2.Click += new System.EventHandler(this.Btn1Practic3mesa2_Click);
-            // 
-            // PnlPracticas4
-            // 
-            this.PnlPracticas4.BackColor = System.Drawing.Color.DeepPink;
-            this.PnlPracticas4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PnlPracticas4.BackgroundImage")));
-            this.PnlPracticas4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.PnlPracticas4.Controls.Add(this.PnlM2P4);
-            this.PnlPracticas4.Controls.Add(this.button4);
-            this.PnlPracticas4.Controls.Add(this.button5);
-            this.PnlPracticas4.Controls.Add(this.Btn1Practic4);
-            this.PnlPracticas4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PnlPracticas4.Location = new System.Drawing.Point(0, 0);
-            this.PnlPracticas4.Name = "PnlPracticas4";
-            this.PnlPracticas4.Size = new System.Drawing.Size(1127, 486);
-            this.PnlPracticas4.TabIndex = 7;
-            this.PnlPracticas4.Visible = false;
-            // 
-            // button4
-            // 
-            this.button4.BackColor = System.Drawing.Color.Brown;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.ForeColor = System.Drawing.Color.Black;
-            this.button4.Location = new System.Drawing.Point(234, 23);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "P3";
-            this.button4.UseVisualStyleBackColor = false;
-            // 
-            // button5
-            // 
-            this.button5.BackColor = System.Drawing.Color.Brown;
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.ForeColor = System.Drawing.Color.Black;
-            this.button5.Location = new System.Drawing.Point(134, 23);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 1;
-            this.button5.Text = "P2";
-            this.button5.UseVisualStyleBackColor = false;
-            // 
-            // Btn1Practic4
-            // 
-            this.Btn1Practic4.BackColor = System.Drawing.Color.Brown;
-            this.Btn1Practic4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Btn1Practic4.ForeColor = System.Drawing.Color.Black;
-            this.Btn1Practic4.Location = new System.Drawing.Point(34, 23);
-            this.Btn1Practic4.Name = "Btn1Practic4";
-            this.Btn1Practic4.Size = new System.Drawing.Size(75, 23);
-            this.Btn1Practic4.TabIndex = 0;
-            this.Btn1Practic4.Text = "P1";
-            this.Btn1Practic4.UseVisualStyleBackColor = false;
             // 
             // PnlPracticas2
             // 
@@ -675,12 +702,14 @@
             // 
             // BTN4PANEL2
             // 
-            this.BTN4PANEL2.BackColor = System.Drawing.Color.Brown;
+            this.BTN4PANEL2.BackColor = System.Drawing.Color.Crimson;
+            this.BTN4PANEL2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.BTN4PANEL2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.BTN4PANEL2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BTN4PANEL2.ForeColor = System.Drawing.Color.Black;
+            this.BTN4PANEL2.ForeColor = System.Drawing.Color.Transparent;
             this.BTN4PANEL2.Location = new System.Drawing.Point(346, 12);
             this.BTN4PANEL2.Name = "BTN4PANEL2";
-            this.BTN4PANEL2.Size = new System.Drawing.Size(75, 23);
+            this.BTN4PANEL2.Size = new System.Drawing.Size(80, 23);
             this.BTN4PANEL2.TabIndex = 5;
             this.BTN4PANEL2.Text = "P4";
             this.BTN4PANEL2.UseVisualStyleBackColor = false;
@@ -688,15 +717,16 @@
             // 
             // DGVmesa2panel2
             // 
+            this.DGVmesa2panel2.BackgroundColor = System.Drawing.Color.DeepPink;
             this.DGVmesa2panel2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InfoText;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.DGVmesa2panel2.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.DGVmesa2panel2.DefaultCellStyle = dataGridViewCellStyle2;
             this.DGVmesa2panel2.Location = new System.Drawing.Point(23, 41);
             this.DGVmesa2panel2.Name = "DGVmesa2panel2";
             this.DGVmesa2panel2.Size = new System.Drawing.Size(1092, 431);
@@ -704,12 +734,14 @@
             // 
             // BTN3PANEL2
             // 
-            this.BTN3PANEL2.BackColor = System.Drawing.Color.Brown;
+            this.BTN3PANEL2.BackColor = System.Drawing.Color.Crimson;
+            this.BTN3PANEL2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.BTN3PANEL2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.BTN3PANEL2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BTN3PANEL2.ForeColor = System.Drawing.Color.Black;
+            this.BTN3PANEL2.ForeColor = System.Drawing.Color.Transparent;
             this.BTN3PANEL2.Location = new System.Drawing.Point(234, 12);
             this.BTN3PANEL2.Name = "BTN3PANEL2";
-            this.BTN3PANEL2.Size = new System.Drawing.Size(75, 23);
+            this.BTN3PANEL2.Size = new System.Drawing.Size(80, 23);
             this.BTN3PANEL2.TabIndex = 2;
             this.BTN3PANEL2.Text = "P3";
             this.BTN3PANEL2.UseVisualStyleBackColor = false;
@@ -717,12 +749,14 @@
             // 
             // button2
             // 
-            this.button2.BackColor = System.Drawing.Color.Brown;
+            this.button2.BackColor = System.Drawing.Color.Crimson;
+            this.button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.ForeColor = System.Drawing.Color.Black;
+            this.button2.ForeColor = System.Drawing.Color.Transparent;
             this.button2.Location = new System.Drawing.Point(134, 12);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(80, 23);
             this.button2.TabIndex = 1;
             this.button2.Text = "P2";
             this.button2.UseVisualStyleBackColor = false;
@@ -730,12 +764,14 @@
             // 
             // button3
             // 
-            this.button3.BackColor = System.Drawing.Color.Brown;
+            this.button3.BackColor = System.Drawing.Color.Crimson;
+            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.ForeColor = System.Drawing.Color.Black;
+            this.button3.ForeColor = System.Drawing.Color.Transparent;
             this.button3.Location = new System.Drawing.Point(34, 12);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(80, 23);
             this.button3.TabIndex = 0;
             this.button3.Text = "P1";
             this.button3.UseVisualStyleBackColor = false;
@@ -759,15 +795,16 @@
             // 
             // DGVPRACTICA2P1
             // 
+            this.DGVPRACTICA2P1.BackgroundColor = System.Drawing.Color.DeepPink;
             this.DGVPRACTICA2P1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InfoText;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.DGVPRACTICA2P1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.DGVPRACTICA2P1.DefaultCellStyle = dataGridViewCellStyle1;
             this.DGVPRACTICA2P1.Location = new System.Drawing.Point(34, 67);
             this.DGVPRACTICA2P1.Name = "DGVPRACTICA2P1";
             this.DGVPRACTICA2P1.Size = new System.Drawing.Size(1081, 405);
@@ -775,10 +812,13 @@
             // 
             // Btn3Practica2Panel1
             // 
-            this.Btn3Practica2Panel1.BackColor = System.Drawing.Color.Purple;
+            this.Btn3Practica2Panel1.BackColor = System.Drawing.Color.Crimson;
+            this.Btn3Practica2Panel1.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Btn3Practica2Panel1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.Btn3Practica2Panel1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.Btn3Practica2Panel1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn3Practica2Panel1.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Btn3Practica2Panel1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Btn3Practica2Panel1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.Btn3Practica2Panel1.Location = new System.Drawing.Point(234, 23);
             this.Btn3Practica2Panel1.Name = "Btn3Practica2Panel1";
             this.Btn3Practica2Panel1.Size = new System.Drawing.Size(90, 38);
@@ -789,10 +829,13 @@
             // 
             // Btn2Practica2Panel1
             // 
-            this.Btn2Practica2Panel1.BackColor = System.Drawing.Color.Purple;
+            this.Btn2Practica2Panel1.BackColor = System.Drawing.Color.Crimson;
+            this.Btn2Practica2Panel1.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Btn2Practica2Panel1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.Btn2Practica2Panel1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.Btn2Practica2Panel1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn2Practica2Panel1.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Btn2Practica2Panel1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Btn2Practica2Panel1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.Btn2Practica2Panel1.Location = new System.Drawing.Point(134, 23);
             this.Btn2Practica2Panel1.Name = "Btn2Practica2Panel1";
             this.Btn2Practica2Panel1.Size = new System.Drawing.Size(90, 38);
@@ -803,10 +846,13 @@
             // 
             // Btn1Practica2Panel1
             // 
-            this.Btn1Practica2Panel1.BackColor = System.Drawing.Color.Purple;
+            this.Btn1Practica2Panel1.BackColor = System.Drawing.Color.Crimson;
+            this.Btn1Practica2Panel1.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Btn1Practica2Panel1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.Btn1Practica2Panel1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.Btn1Practica2Panel1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn1Practica2Panel1.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Btn1Practica2Panel1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Btn1Practica2Panel1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.Btn1Practica2Panel1.Location = new System.Drawing.Point(34, 23);
             this.Btn1Practica2Panel1.Name = "Btn1Practica2Panel1";
             this.Btn1Practica2Panel1.Size = new System.Drawing.Size(90, 38);
@@ -837,14 +883,6 @@
             this.BTNmatrizPractica2.Text = "DGV";
             this.BTNmatrizPractica2.UseVisualStyleBackColor = false;
             this.BTNmatrizPractica2.Click += new System.EventHandler(this.BTNmatrizPractica2_Click);
-            // 
-            // PnlM2P4
-            // 
-            this.PnlM2P4.Location = new System.Drawing.Point(58, 67);
-            this.PnlM2P4.Name = "PnlM2P4";
-            this.PnlM2P4.Size = new System.Drawing.Size(1034, 377);
-            this.PnlM2P4.TabIndex = 3;
-            this.PnlM2P4.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
             // 
             // circularPictureBox4
             // 
@@ -935,8 +973,8 @@
             this.PnlMioBtnsM2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.PnlCentral.ResumeLayout(false);
-            this.PnlPracticas3.ResumeLayout(false);
             this.PnlPracticas4.ResumeLayout(false);
+            this.PnlPracticas3.ResumeLayout(false);
             this.PnlPracticas2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DGVmesa2panel2)).EndInit();
             this.PnlPracticas1.ResumeLayout(false);
